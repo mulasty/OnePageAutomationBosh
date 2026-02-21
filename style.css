@@ -131,14 +131,51 @@ body {
   letter-spacing: 0.01em;
 }
 
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.15rem;
+  padding: 0.62rem 1.05rem;
+  border: 1px solid rgba(226, 0, 21, 0.45);
+  background: linear-gradient(135deg, rgba(226, 0, 21, 0.2), rgba(63, 157, 255, 0.16));
+  color: var(--text-primary);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.76rem;
+  font-weight: 600;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+}
+
 .scroll-root {
   position: relative;
 }
 
 #hero {
+  --hero-light: 0;
+  --hero-darkness: 1;
   background:
-    radial-gradient(circle at 14% 20%, rgba(226, 0, 21, 0.22), transparent 34%),
+    radial-gradient(
+      circle at 14% 20%,
+      rgb(226 0 21 / calc(0.1 + var(--hero-light) * 0.16)),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at 80% 18%,
+      rgb(63 157 255 / calc(0.04 + var(--hero-light) * 0.12)),
+      transparent 44%
+    ),
     linear-gradient(170deg, #101621 0%, #090e14 100%);
+}
+
+#hero::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.08 + var(--hero-darkness) * 0.34)) 0%,
+      rgb(0 0 0 / calc(0.16 + var(--hero-darkness) * 0.4)) 100%
+    );
 }
 
 #problems {

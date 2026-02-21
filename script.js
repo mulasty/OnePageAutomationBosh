@@ -106,10 +106,112 @@
     };
   }
 
+  function ensureHeroCta(content) {
+    let cta = content.querySelector('[data-hero-cta="true"]');
+    if (cta) {
+      return cta;
+    }
+
+    cta = document.createElement("a");
+    cta.href = "#cta";
+    cta.className = "hero-cta";
+    cta.dataset.heroCta = "true";
+    cta.textContent = "[Placeholder: Hero CTA]";
+    content.appendChild(cta);
+
+    return cta;
+  }
+
+  function createHeroRevealConfig(content) {
+    const heading = content.querySelector("h1, h2");
+    const subtitle = content.querySelector("p");
+    const cta = ensureHeroCta(content);
+
+    return {
+      heading,
+      subtitle,
+      cta,
+      lightFrom: {
+        "--hero-light": 0,
+        "--hero-darkness": 1,
+      },
+      lightTo: {
+        "--hero-light": 1,
+        "--hero-darkness": 0.25,
+        duration: CONFIG.phaseDuration.enter,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      lightActiveTo: {
+        "--hero-light": 1.08,
+        "--hero-darkness": 0.15,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      },
+      lightExitTo: {
+        "--hero-light": 1,
+        "--hero-darkness": 0.32,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      headingFrom: {
+        autoAlpha: 0,
+        yPercent: 12,
+        scale: 0.94,
+      },
+      headingTo: {
+        autoAlpha: 1,
+        yPercent: 0,
+        scale: 1,
+        duration: CONFIG.phaseDuration.enter * 0.78,
+        ease: "power3.out",
+        overwrite: "auto",
+      },
+      subtitleFrom: {
+        autoAlpha: 0,
+        yPercent: 16,
+        scale: 0.98,
+      },
+      subtitleTo: {
+        autoAlpha: 1,
+        yPercent: 0,
+        scale: 1,
+        duration: CONFIG.phaseDuration.enter * 0.62,
+        ease: "power2.out",
+        overwrite: "auto",
+      },
+      ctaFrom: {
+        autoAlpha: 0,
+        yPercent: 18,
+        scale: 0.975,
+      },
+      ctaTo: {
+        autoAlpha: 1,
+        yPercent: 0,
+        scale: 1,
+        duration: CONFIG.phaseDuration.enter * 0.56,
+        ease: "power2.out",
+        overwrite: "auto",
+      },
+      ctaExitTo: {
+        autoAlpha: 0.85,
+        yPercent: -2,
+        scale: 0.995,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+    };
+  }
+
   function createSceneModule(section, index) {
     const sceneId = section.id || `scene-${index + 1}`;
     const content = section.querySelector(".panel-content") || section;
     const layers = resolveSceneLayers(content);
+    const isHero = sceneId === "hero";
+    const heroReveal = isHero ? createHeroRevealConfig(content) : null;
 
     section.setAttribute("data-scene-id", sceneId);
     section.setAttribute("data-scene-index", String(index));
@@ -129,13 +231,15 @@
         active: () => {},
         exit: () => {},
       },
+      isHero,
+      heroReveal,
       layers,
       motion: {
-        target: layers.foreground.target || content,
+        target: isHero ? content : layers.foreground.target || content,
         enterFrom: {
-          autoAlpha: 0.35,
+          autoAlpha: isHero ? 1 : 0.35,
           yPercent: 0,
-          scale: 0.992,
+          scale: isHero ? 1 : 0.992,
         },
         enterTo: {
           autoAlpha: 1,
@@ -233,6 +337,37 @@
 
   function prepareSceneBaseStates() {
     state.scenes.forEach((scene, index) => {
+      if (scene.isHero && scene.heroReveal) {
+        window.gsap.set(scene.element, {
+          "--hero-light": 0,
+          "--hero-darkness": 1,
+        });
+
+        if (scene.heroReveal.heading) {
+          window.gsap.set(scene.heroReveal.heading, {
+            ...scene.heroReveal.headingFrom,
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        }
+
+        if (scene.heroReveal.subtitle) {
+          window.gsap.set(scene.heroReveal.subtitle, {
+            ...scene.heroReveal.subtitleFrom,
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        }
+
+        if (scene.heroReveal.cta) {
+          window.gsap.set(scene.heroReveal.cta, {
+            ...scene.heroReveal.ctaFrom,
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        }
+      }
+
       window.gsap.set(scene.motion.target, {
         autoAlpha: index === 0 ? 1 : scene.motion.enterFrom.autoAlpha,
         yPercent: index === 0 ? 0 : scene.motion.enterFrom.yPercent,
@@ -269,6 +404,10 @@
 
   function addSceneSlot(masterTimeline, scene) {
     const isLastScene = scene.index === state.scenes.length - 1;
+    if (scene.isHero && scene.heroReveal) {
+      addHeroSceneSlot(masterTimeline, scene, isLastScene);
+      return;
+    }
 
     masterTimeline.addLabel(scene.labels.enter);
     masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
@@ -295,19 +434,107 @@
     addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.exitTo, "<");
     addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.exitTo, "<");
 
+    addSceneShift(masterTimeline, scene.index, isLastScene);
+  }
+
+  function addHeroSceneSlot(masterTimeline, scene, isLastScene) {
+    const hero = scene.heroReveal;
+
+    masterTimeline.addLabel(scene.labels.enter);
+    masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
+    masterTimeline.fromTo(scene.element, hero.lightFrom, hero.lightTo);
+
+    addDepthTween(
+      masterTimeline,
+      scene.layers.background.target,
+      scene.depth.background.enterFrom,
+      scene.depth.background.enterTo,
+      "<"
+    );
+    addDepthTween(
+      masterTimeline,
+      scene.layers.midground.target,
+      scene.depth.midground.enterFrom,
+      scene.depth.midground.enterTo,
+      "<"
+    );
+    addDepthTween(
+      masterTimeline,
+      scene.layers.foreground.target,
+      scene.depth.foreground.enterFrom,
+      scene.depth.foreground.enterTo,
+      "<"
+    );
+
+    addElementTween(masterTimeline, hero.heading, hero.headingFrom, hero.headingTo, "<+0.04");
+    addElementTween(masterTimeline, hero.subtitle, hero.subtitleFrom, hero.subtitleTo, "<+0.08");
+    addElementTween(masterTimeline, hero.cta, hero.ctaFrom, hero.ctaTo, "<+0.1");
+
+    masterTimeline.addLabel(scene.labels.active);
+    masterTimeline.call(() => runScenePhase(scene, "active"), null, ">");
+    masterTimeline.to(scene.element, hero.lightActiveTo);
+
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.activeTo, "<");
+
+    addElementTween(masterTimeline, hero.heading, null, {
+      autoAlpha: 1,
+      yPercent: -1,
+      scale: 1,
+      duration: CONFIG.phaseDuration.active,
+      ease: "none",
+      overwrite: "auto",
+    }, "<");
+
+    addElementTween(masterTimeline, hero.subtitle, null, {
+      autoAlpha: 1,
+      yPercent: -0.4,
+      scale: 1,
+      duration: CONFIG.phaseDuration.active,
+      ease: "none",
+      overwrite: "auto",
+    }, "<");
+
+    addElementTween(masterTimeline, hero.cta, null, {
+      autoAlpha: 1,
+      yPercent: 0,
+      scale: 1,
+      duration: CONFIG.phaseDuration.active,
+      ease: "none",
+      overwrite: "auto",
+    }, "<");
+
+    masterTimeline.addLabel(scene.labels.exit);
+    masterTimeline.call(() => runScenePhase(scene, "exit"), null, ">");
+    masterTimeline.to(scene.element, hero.lightExitTo);
+    addElementTween(masterTimeline, hero.cta, null, hero.ctaExitTo, "<");
+
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.exitTo, "<");
+
+    addSceneShift(masterTimeline, scene.index, isLastScene);
+  }
+
+  function addSceneShift(masterTimeline, sceneIndex, isLastScene) {
     if (!isLastScene) {
-      masterTimeline.to(state.sections, {
-        yPercent: -100 * (scene.index + 1),
-        duration: CONFIG.phaseDuration.exit,
-        ease: "none",
-      }, "<");
+      masterTimeline.to(
+        state.sections,
+        {
+          yPercent: -100 * (sceneIndex + 1),
+          duration: CONFIG.phaseDuration.exit,
+          ease: "none",
+        },
+        "<"
+      );
       return;
     }
 
     masterTimeline.to({}, { duration: CONFIG.phaseDuration.exit });
   }
 
-  function addDepthTween(timeline, target, fromVars, toVars, position) {
+  function addElementTween(timeline, target, fromVars, toVars, position) {
     if (!target || !toVars) {
       return;
     }
@@ -318,6 +545,10 @@
     }
 
     timeline.to(target, toVars, position);
+  }
+
+  function addDepthTween(timeline, target, fromVars, toVars, position) {
+    addElementTween(timeline, target, fromVars, toVars, position);
   }
 
   function destroyTimeline() {
