@@ -6,11 +6,17 @@
     sectionSelector: ".panel",
     scrub: 1.2,
     debugMarkers: false, // Set true to enable ScrollTrigger markers during debug.
+    phaseDuration: {
+      enter: 0.2,
+      active: 0.6,
+      exit: 0.2,
+    },
   };
 
   const state = {
     root: null,
     sections: [],
+    scenes: [],
     masterTimeline: null,
     activeSectionIndex: -1,
     resizeTimer: null,
@@ -39,26 +45,73 @@
     state.activeSectionIndex = index;
   }
 
-  function addSectionSlot(masterTimeline, section, index, sections) {
-    const sectionName = section.id || `section-${index + 1}`;
+  function createSceneModule(section, index) {
+    const sceneId = section.id || `scene-${index + 1}`;
 
-    masterTimeline.addLabel(`${sectionName}-start`);
-    masterTimeline.call(() => setActiveSection(index), null, ">");
+    section.setAttribute("data-scene-id", sceneId);
+    section.setAttribute("data-scene-index", String(index));
+    section.setAttribute("data-scene-phase", "idle");
 
-    // Placeholder hook for section-specific animations in future prompts.
-    masterTimeline.call(() => {}, null, ">");
+    return {
+      id: sceneId,
+      index,
+      element: section,
+      labels: {
+        enter: `${sceneId}-enter`,
+        active: `${sceneId}-active`,
+        exit: `${sceneId}-exit`,
+      },
+      hooks: {
+        enter: () => {},
+        active: () => {},
+        exit: () => {},
+      },
+    };
+  }
 
-    if (index < sections.length - 1) {
-      masterTimeline.to(sections, {
-        yPercent: -100 * (index + 1),
-        duration: 1,
-        ease: "none",
-      });
-    } else {
-      masterTimeline.to({}, { duration: 1 });
+  function buildSceneModules() {
+    state.scenes = state.sections.map((section, index) => createSceneModule(section, index));
+  }
+
+  function runScenePhase(scene, phase) {
+    scene.element.setAttribute("data-scene-phase", phase);
+
+    if (typeof scene.hooks[phase] === "function") {
+      scene.hooks[phase]();
     }
 
-    masterTimeline.addLabel(`${sectionName}-end`);
+    if (phase === "active") {
+      setActiveSection(scene.index);
+    }
+  }
+
+  function addSceneSlot(masterTimeline, scene) {
+    const isLastScene = scene.index === state.scenes.length - 1;
+
+    masterTimeline.addLabel(scene.labels.enter);
+    masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
+    masterTimeline.to({}, { duration: CONFIG.phaseDuration.enter });
+
+    masterTimeline.addLabel(scene.labels.active);
+    masterTimeline.call(() => runScenePhase(scene, "active"), null, ">");
+
+    // Placeholder slot for future scene-specific active animations.
+    masterTimeline.call(() => {}, null, ">");
+    masterTimeline.to({}, { duration: CONFIG.phaseDuration.active });
+
+    masterTimeline.addLabel(scene.labels.exit);
+    masterTimeline.call(() => runScenePhase(scene, "exit"), null, ">");
+
+    if (!isLastScene) {
+      masterTimeline.to(state.sections, {
+        yPercent: -100 * (scene.index + 1),
+        duration: CONFIG.phaseDuration.exit,
+        ease: "none",
+      });
+      return;
+    }
+
+    masterTimeline.to({}, { duration: CONFIG.phaseDuration.exit });
   }
 
   function destroyTimeline() {
@@ -74,6 +127,24 @@
     state.masterTimeline = null;
   }
 
+  function getSceneProgress(sceneIndex) {
+    if (!state.masterTimeline || state.masterTimeline.duration() === 0) {
+      return 0;
+    }
+
+    const scene = state.scenes[sceneIndex];
+    if (!scene) {
+      return 0;
+    }
+
+    const labelTime = state.masterTimeline.labels[scene.labels.enter];
+    if (typeof labelTime !== "number") {
+      return 0;
+    }
+
+    return labelTime / state.masterTimeline.duration();
+  }
+
   function buildMasterTimeline() {
     destroyTimeline();
     cacheDom();
@@ -82,12 +153,16 @@
       return;
     }
 
+    buildSceneModules();
+
     window.gsap.set(state.sections, {
       yPercent: 0,
       force3D: true,
     });
 
-    setActiveSection(0);
+    if (state.scenes.length > 0) {
+      runScenePhase(state.scenes[0], "active");
+    }
 
     state.masterTimeline = window.gsap.timeline({
       defaults: { ease: "none" },
@@ -95,7 +170,7 @@
         id: "master-scroll-timeline",
         trigger: state.root,
         start: "top top",
-        end: () => `+=${window.innerHeight * state.sections.length}`,
+        end: () => `+=${window.innerHeight * state.scenes.length}`,
         pin: true, // Sticky container logic for cinematic scroll foundation.
         scrub: CONFIG.scrub,
         markers: CONFIG.debugMarkers,
@@ -104,17 +179,17 @@
         anticipatePin: 1,
         onUpdate: (self) => {
           const nextIndex = Math.min(
-            state.sections.length - 1,
-            Math.floor(self.progress * state.sections.length)
+            state.scenes.length - 1,
+            Math.floor(self.progress * state.scenes.length)
           );
           setActiveSection(nextIndex);
         },
       },
     });
 
-    state.sections.forEach((section, index) => {
-      section.setAttribute("data-slot", String(index + 1));
-      addSectionSlot(state.masterTimeline, section, index, state.sections);
+    state.scenes.forEach((scene) => {
+      scene.element.setAttribute("data-slot", String(scene.index + 1));
+      addSceneSlot(state.masterTimeline, scene);
     });
   }
 
@@ -141,7 +216,7 @@
 
     event.preventDefault();
 
-    const progress = targetIndex / Math.max(state.sections.length - 1, 1);
+    const progress = getSceneProgress(targetIndex);
     const trigger = state.masterTimeline.scrollTrigger;
     const scrollTarget = trigger.start + (trigger.end - trigger.start) * progress;
 
