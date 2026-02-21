@@ -47,6 +47,7 @@
 
   function createSceneModule(section, index) {
     const sceneId = section.id || `scene-${index + 1}`;
+    const content = section.querySelector(".panel-content") || section;
 
     section.setAttribute("data-scene-id", sceneId);
     section.setAttribute("data-scene-index", String(index));
@@ -66,11 +67,55 @@
         active: () => {},
         exit: () => {},
       },
+      motion: {
+        target: content,
+        enterFrom: {
+          autoAlpha: 0.35,
+          yPercent: 5,
+          scale: 0.992,
+        },
+        enterTo: {
+          autoAlpha: 1,
+          yPercent: 0,
+          scale: 1,
+          duration: CONFIG.phaseDuration.enter,
+          ease: "power2.out",
+          overwrite: "auto",
+        },
+        activeTo: {
+          autoAlpha: 1,
+          yPercent: 0,
+          scale: 1,
+          duration: CONFIG.phaseDuration.active,
+          ease: "none",
+          overwrite: "auto",
+        },
+        exitTo: {
+          autoAlpha: 0.7,
+          yPercent: -2,
+          scale: 0.996,
+          duration: CONFIG.phaseDuration.exit,
+          ease: "power1.inOut",
+          overwrite: "auto",
+        },
+      },
     };
   }
 
   function buildSceneModules() {
     state.scenes = state.sections.map((section, index) => createSceneModule(section, index));
+  }
+
+  function prepareSceneBaseStates() {
+    state.scenes.forEach((scene, index) => {
+      window.gsap.set(scene.motion.target, {
+        autoAlpha: index === 0 ? 1 : scene.motion.enterFrom.autoAlpha,
+        yPercent: index === 0 ? 0 : scene.motion.enterFrom.yPercent,
+        scale: index === 0 ? 1 : scene.motion.enterFrom.scale,
+        transformOrigin: "50% 50%",
+        force3D: true,
+      });
+    });
   }
 
   function runScenePhase(scene, phase) {
@@ -90,24 +135,26 @@
 
     masterTimeline.addLabel(scene.labels.enter);
     masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
-    masterTimeline.to({}, { duration: CONFIG.phaseDuration.enter });
+    masterTimeline.fromTo(
+      scene.motion.target,
+      scene.motion.enterFrom,
+      scene.motion.enterTo
+    );
 
     masterTimeline.addLabel(scene.labels.active);
     masterTimeline.call(() => runScenePhase(scene, "active"), null, ">");
-
-    // Placeholder slot for future scene-specific active animations.
-    masterTimeline.call(() => {}, null, ">");
-    masterTimeline.to({}, { duration: CONFIG.phaseDuration.active });
+    masterTimeline.to(scene.motion.target, scene.motion.activeTo);
 
     masterTimeline.addLabel(scene.labels.exit);
     masterTimeline.call(() => runScenePhase(scene, "exit"), null, ">");
+    masterTimeline.to(scene.motion.target, scene.motion.exitTo);
 
     if (!isLastScene) {
       masterTimeline.to(state.sections, {
         yPercent: -100 * (scene.index + 1),
         duration: CONFIG.phaseDuration.exit,
         ease: "none",
-      });
+      }, "<");
       return;
     }
 
@@ -154,6 +201,7 @@
     }
 
     buildSceneModules();
+    prepareSceneBaseStates();
 
     window.gsap.set(state.sections, {
       yPercent: 0,
