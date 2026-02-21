@@ -11,6 +11,23 @@
       active: 0.6,
       exit: 0.2,
     },
+    depthMotion: {
+      background: {
+        enterFromY: 1.5,
+        activeToY: -1.2,
+        exitToY: -1.8,
+      },
+      midground: {
+        enterFromY: 3,
+        activeToY: -2.4,
+        exitToY: -3.4,
+      },
+      foreground: {
+        enterFromY: 4.5,
+        activeToY: -3.6,
+        exitToY: -5,
+      },
+    },
   };
 
   const state = {
@@ -45,9 +62,54 @@
     state.activeSectionIndex = index;
   }
 
+  function resolveSceneLayers(content) {
+    const heading = content.querySelector("h1, h2");
+    const paragraph = content.querySelector("p");
+    const usedTargets = new Set();
+
+    function pickLayerTarget(primary, fallback) {
+      if (primary && !usedTargets.has(primary)) {
+        usedTargets.add(primary);
+        return primary;
+      }
+
+      if (fallback && !usedTargets.has(fallback)) {
+        usedTargets.add(fallback);
+        return fallback;
+      }
+
+      return null;
+    }
+
+    return {
+      background: {
+        target: pickLayerTarget(content, null),
+      },
+      midground: {
+        target: pickLayerTarget(heading, content),
+      },
+      foreground: {
+        target: pickLayerTarget(paragraph, content),
+      },
+    };
+  }
+
+  function withLayerTransform(layerConfig, values) {
+    if (!layerConfig || !layerConfig.target) {
+      return null;
+    }
+
+    return {
+      ...values,
+      overwrite: "auto",
+      force3D: true,
+    };
+  }
+
   function createSceneModule(section, index) {
     const sceneId = section.id || `scene-${index + 1}`;
     const content = section.querySelector(".panel-content") || section;
+    const layers = resolveSceneLayers(content);
 
     section.setAttribute("data-scene-id", sceneId);
     section.setAttribute("data-scene-index", String(index));
@@ -67,11 +129,12 @@
         active: () => {},
         exit: () => {},
       },
+      layers,
       motion: {
-        target: content,
+        target: layers.foreground.target || content,
         enterFrom: {
           autoAlpha: 0.35,
-          yPercent: 5,
+          yPercent: 0,
           scale: 0.992,
         },
         enterTo: {
@@ -92,11 +155,73 @@
         },
         exitTo: {
           autoAlpha: 0.7,
-          yPercent: -2,
+          yPercent: 0,
           scale: 0.996,
           duration: CONFIG.phaseDuration.exit,
           ease: "power1.inOut",
           overwrite: "auto",
+        },
+      },
+      depth: {
+        background: {
+          enterFrom: withLayerTransform(layers.background, {
+            yPercent: CONFIG.depthMotion.background.enterFromY,
+          }),
+          enterTo: withLayerTransform(layers.background, {
+            yPercent: 0,
+            duration: CONFIG.phaseDuration.enter,
+            ease: "power1.out",
+          }),
+          activeTo: withLayerTransform(layers.background, {
+            yPercent: CONFIG.depthMotion.background.activeToY,
+            duration: CONFIG.phaseDuration.active,
+            ease: "none",
+          }),
+          exitTo: withLayerTransform(layers.background, {
+            yPercent: CONFIG.depthMotion.background.exitToY,
+            duration: CONFIG.phaseDuration.exit,
+            ease: "none",
+          }),
+        },
+        midground: {
+          enterFrom: withLayerTransform(layers.midground, {
+            yPercent: CONFIG.depthMotion.midground.enterFromY,
+          }),
+          enterTo: withLayerTransform(layers.midground, {
+            yPercent: 0,
+            duration: CONFIG.phaseDuration.enter,
+            ease: "power1.out",
+          }),
+          activeTo: withLayerTransform(layers.midground, {
+            yPercent: CONFIG.depthMotion.midground.activeToY,
+            duration: CONFIG.phaseDuration.active,
+            ease: "none",
+          }),
+          exitTo: withLayerTransform(layers.midground, {
+            yPercent: CONFIG.depthMotion.midground.exitToY,
+            duration: CONFIG.phaseDuration.exit,
+            ease: "none",
+          }),
+        },
+        foreground: {
+          enterFrom: withLayerTransform(layers.foreground, {
+            yPercent: CONFIG.depthMotion.foreground.enterFromY,
+          }),
+          enterTo: withLayerTransform(layers.foreground, {
+            yPercent: 0,
+            duration: CONFIG.phaseDuration.enter,
+            ease: "power1.out",
+          }),
+          activeTo: withLayerTransform(layers.foreground, {
+            yPercent: CONFIG.depthMotion.foreground.activeToY,
+            duration: CONFIG.phaseDuration.active,
+            ease: "none",
+          }),
+          exitTo: withLayerTransform(layers.foreground, {
+            yPercent: CONFIG.depthMotion.foreground.exitToY,
+            duration: CONFIG.phaseDuration.exit,
+            ease: "none",
+          }),
         },
       },
     };
@@ -114,6 +239,18 @@
         scale: index === 0 ? 1 : scene.motion.enterFrom.scale,
         transformOrigin: "50% 50%",
         force3D: true,
+      });
+
+      const depthLayers = [scene.layers.background, scene.layers.midground, scene.layers.foreground];
+      depthLayers.forEach((layer) => {
+        if (!layer || !layer.target) {
+          return;
+        }
+
+        window.gsap.set(layer.target, {
+          transformOrigin: "50% 50%",
+          force3D: true,
+        });
       });
     });
   }
@@ -140,14 +277,23 @@
       scene.motion.enterFrom,
       scene.motion.enterTo
     );
+    addDepthTween(masterTimeline, scene.layers.background.target, scene.depth.background.enterFrom, scene.depth.background.enterTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, scene.depth.midground.enterFrom, scene.depth.midground.enterTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, scene.depth.foreground.enterFrom, scene.depth.foreground.enterTo, "<");
 
     masterTimeline.addLabel(scene.labels.active);
     masterTimeline.call(() => runScenePhase(scene, "active"), null, ">");
     masterTimeline.to(scene.motion.target, scene.motion.activeTo);
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.activeTo, "<");
 
     masterTimeline.addLabel(scene.labels.exit);
     masterTimeline.call(() => runScenePhase(scene, "exit"), null, ">");
     masterTimeline.to(scene.motion.target, scene.motion.exitTo);
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.exitTo, "<");
 
     if (!isLastScene) {
       masterTimeline.to(state.sections, {
@@ -159,6 +305,19 @@
     }
 
     masterTimeline.to({}, { duration: CONFIG.phaseDuration.exit });
+  }
+
+  function addDepthTween(timeline, target, fromVars, toVars, position) {
+    if (!target || !toVars) {
+      return;
+    }
+
+    if (fromVars) {
+      timeline.fromTo(target, fromVars, toVars, position);
+      return;
+    }
+
+    timeline.to(target, toVars, position);
   }
 
   function destroyTimeline() {
