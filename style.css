@@ -1,40 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Rajdhani:wght@600;700&display=swap");
+
 * {
   box-sizing: border-box;
   margin: 0;
 }
 
+:root {
+  --bg-base: #07090d;
+  --bg-elevated: #10141b;
+  --panel-surface: #0f141c;
+  --panel-border: rgba(255, 255, 255, 0.09);
+  --text-primary: #f4f7fb;
+  --text-secondary: #aeb8c7;
+  --bosch-red: #e20015;
+  --bosch-red-soft: rgba(226, 0, 21, 0.2);
+  --ai-blue: #3f9dff;
+  --ai-blue-soft: rgba(63, 157, 255, 0.2);
+  --header-bg: rgba(8, 10, 15, 0.84);
+  --shadow-soft: 0 14px 36px rgba(0, 0, 0, 0.34);
+}
+
 body {
-  font-family: Arial, sans-serif;
-  line-height: 1.5;
-  color: #222222;
-  background: #f4f4f4;
+  font-family: "Barlow", "Segoe UI", sans-serif;
+  line-height: 1.55;
+  color: var(--text-primary);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(226, 0, 21, 0.11), transparent 38%),
+    radial-gradient(circle at 88% 86%, rgba(63, 157, 255, 0.08), transparent 34%),
+    linear-gradient(180deg, #07090d 0%, #090d13 42%, #07090d 100%);
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
 .site-header {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: #ffffff;
-  border-bottom: 1px solid #d9d9d9;
+  background: var(--header-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-soft);
 }
 
 .nav-list {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  gap: 0.55rem;
+  padding: 0.85rem 1rem;
 }
 
 .nav-list a {
   display: inline-block;
-  padding: 0.3rem 0.55rem;
+  padding: 0.32rem 0.62rem;
   text-decoration: none;
-  color: #222222;
-  border: 1px solid #cfcfcf;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.nav-list a:hover,
+.nav-list a:focus-visible {
+  color: var(--text-primary);
+  border-color: var(--bosch-red);
+  background: rgba(226, 0, 21, 0.12);
 }
 
 .panel {
@@ -43,26 +75,123 @@ body {
   align-items: center;
   justify-content: center;
   padding: 5rem 1rem 2rem;
-  border-bottom: 1px solid #dddddd;
-  background: #ffffff;
+  border-bottom: 1px solid var(--panel-border);
+  background: linear-gradient(180deg, #0f141c 0%, #0b1017 100%);
   will-change: transform;
+  position: relative;
+  overflow: hidden;
 }
 
-.panel:nth-of-type(even) {
-  background: #f8f8f8;
+.panel::before,
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.panel::before {
+  background:
+    radial-gradient(circle at 76% 22%, var(--bosch-red-soft), transparent 42%),
+    radial-gradient(circle at 21% 82%, var(--ai-blue-soft), transparent 40%);
+  opacity: 0.55;
+}
+
+.panel::after {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.36) 100%);
+  mix-blend-mode: normal;
 }
 
 .panel-content {
   width: 100%;
   max-width: 760px;
+  position: relative;
+  z-index: 1;
+  padding: 1.6rem 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(145deg, rgba(13, 17, 24, 0.86), rgba(11, 15, 22, 0.84));
+  box-shadow: var(--shadow-soft);
 }
 
 .panel-content h1,
 .panel-content h2 {
-  margin-bottom: 0.5rem;
-  font-size: 2rem;
+  margin-bottom: 0.65rem;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  font-weight: 650;
+  font-family: "Rajdhani", "Barlow", sans-serif;
+  color: var(--text-primary);
+  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.panel-content p {
+  color: var(--text-secondary);
+  font-size: clamp(1rem, 2.2vw, 1.18rem);
+  letter-spacing: 0.01em;
 }
 
 .scroll-root {
   position: relative;
+}
+
+#hero {
+  background:
+    radial-gradient(circle at 14% 20%, rgba(226, 0, 21, 0.22), transparent 34%),
+    linear-gradient(170deg, #101621 0%, #090e14 100%);
+}
+
+#problems {
+  background:
+    radial-gradient(circle at 84% 82%, rgba(226, 0, 21, 0.16), transparent 34%),
+    linear-gradient(170deg, #12161f 0%, #0b1017 100%);
+}
+
+#ai-activation {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(63, 157, 255, 0.22), transparent 34%),
+    linear-gradient(165deg, #101824 0%, #08111c 100%);
+}
+
+#intake {
+  background:
+    radial-gradient(circle at 16% 80%, rgba(63, 157, 255, 0.16), transparent 32%),
+    linear-gradient(165deg, #0f1822 0%, #09131c 100%);
+}
+
+#planning {
+  background:
+    radial-gradient(circle at 78% 26%, rgba(226, 0, 21, 0.16), transparent 30%),
+    linear-gradient(165deg, #121820 0%, #0b1119 100%);
+}
+
+#parts {
+  background:
+    radial-gradient(circle at 26% 18%, rgba(226, 0, 21, 0.18), transparent 32%),
+    linear-gradient(165deg, #12161f 0%, #0a1119 100%);
+}
+
+#communication {
+  background:
+    radial-gradient(circle at 84% 78%, rgba(63, 157, 255, 0.18), transparent 34%),
+    linear-gradient(165deg, #0f1823 0%, #09121b 100%);
+}
+
+#command-center {
+  background:
+    radial-gradient(circle at 20% 24%, rgba(63, 157, 255, 0.2), transparent 38%),
+    linear-gradient(165deg, #0d1b29 0%, #091321 100%);
+}
+
+#transformation {
+  background:
+    radial-gradient(circle at 80% 18%, rgba(226, 0, 21, 0.22), transparent 36%),
+    radial-gradient(circle at 18% 84%, rgba(63, 157, 255, 0.16), transparent 36%),
+    linear-gradient(165deg, #121b27 0%, #0a131e 100%);
+}
+
+#cta {
+  background:
+    radial-gradient(circle at 52% 22%, rgba(226, 0, 21, 0.26), transparent 44%),
+    linear-gradient(180deg, #12161e 0%, #0b0f16 100%);
 }
