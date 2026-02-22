@@ -262,6 +262,11 @@ body {
   --hero-light: 0;
   --hero-darkness: 1;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.12 + var(--hero-darkness) * 0.16)) 0%,
+      rgb(0 0 0 / calc(0.18 + var(--hero-darkness) * 0.2)) 100%
+    ),
     radial-gradient(
       circle at 14% 20%,
       rgb(226 0 21 / calc(0.1 + var(--hero-light) * 0.16)),
@@ -272,7 +277,15 @@ body {
       rgb(63 157 255 / calc(0.04 + var(--hero-light) * 0.12)),
       transparent 44%
     ),
+    url("/assets/graphics/base/scene-hero__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(170deg, #101621 0%, #090e14 100%);
+}
+
+#hero::before {
+  background:
+    url("/assets/graphics/overlay/scene-hero__layer-overlay__v01.svg") center / cover no-repeat,
+    radial-gradient(circle at 76% 22%, var(--bosch-red-soft), transparent 42%),
+    radial-gradient(circle at 21% 82%, var(--ai-blue-soft), transparent 40%);
 }
 
 #hero::after {
@@ -288,6 +301,11 @@ body {
   --problems-darkness: 1;
   --problems-accent: 0.65;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.16 + var(--problems-darkness) * 0.18)) 0%,
+      rgb(0 0 0 / calc(0.22 + var(--problems-darkness) * 0.2)) 100%
+    ),
     radial-gradient(
       circle at 84% 82%,
       rgb(226 0 21 / calc(0.08 + var(--problems-accent) * 0.1)),
@@ -298,6 +316,7 @@ body {
       rgb(63 157 255 / calc(0.02 + var(--problems-accent) * 0.06)),
       transparent 36%
     ),
+    url("/assets/graphics/base/scene-problems__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(170deg, #10141b 0%, #090d13 100%);
 }
 
@@ -315,6 +334,11 @@ body {
   --activation-darkness: 0.98;
   --activation-scan: 0.05;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.08 + var(--activation-darkness) * 0.14)) 0%,
+      rgb(0 0 0 / calc(0.14 + var(--activation-darkness) * 0.16)) 100%
+    ),
     radial-gradient(
       circle at 82% 18%,
       rgb(63 157 255 / calc(0.08 + var(--activation-glow) * 0.2)),
@@ -325,11 +349,13 @@ body {
       rgb(63 157 255 / calc(0.03 + var(--activation-glow) * 0.12)),
       transparent 42%
     ),
+    url("/assets/graphics/base/scene-ai-activation__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #101824 0%, #08111c 100%);
 }
 
 #ai-activation::before {
   background:
+    url("/assets/graphics/hud/scene-ai-activation__layer-hud__v01.svg") center / cover no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.01 + var(--activation-scan) * 0.06)) 0%,
@@ -356,6 +382,11 @@ body {
   --intake-darkness: 0.96;
   --intake-focus: 0.15;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.08 + var(--intake-darkness) * 0.14)) 0%,
+      rgb(0 0 0 / calc(0.13 + var(--intake-darkness) * 0.16)) 100%
+    ),
     radial-gradient(
       circle at 16% 80%,
       rgb(63 157 255 / calc(0.05 + var(--intake-glow) * 0.12)),
@@ -366,11 +397,13 @@ body {
       rgb(63 157 255 / calc(0.03 + var(--intake-focus) * 0.1)),
       transparent 40%
     ),
+    url("/assets/graphics/base/scene-intake__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #0f1822 0%, #09131c 100%);
 }
 
 #intake::before {
   background:
+    url("/assets/graphics/overlay/scene-intake__layer-overlay__v01.svg") center / cover no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.006 + var(--intake-focus) * 0.05)) 0%,
@@ -407,11 +440,13 @@ body {
       rgb(63 157 255 / calc(0.02 + var(--planning-grid) * 0.08)),
       transparent 40%
     ),
+    url("/assets/graphics/base/scene-planning__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #121820 0%, #0b1119 100%);
 }
 
 #planning::before {
   background:
+    url("/assets/graphics/overlay/scene-planning__layer-overlay__v01.svg") center / cover no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.004 + var(--planning-grid) * 0.04)) 0%,
@@ -448,11 +483,13 @@ body {
       rgb(63 157 255 / calc(0.02 + var(--ops-scan) * 0.1)),
       transparent 38%
     ),
+    url("/assets/graphics/base/scene-parts__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #12161f 0%, #0a1119 100%);
 }
 
 #parts::before {
   background:
+    url("/assets/graphics/overlay/scene-parts__layer-overlay__v01.svg") center / cover no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.005 + var(--ops-scan) * 0.04)) 0%,
@@ -489,11 +526,14 @@ body {
       rgb(226 0 21 / calc(0.03 + var(--ops-scan) * 0.08)),
       transparent 36%
     ),
+    url("/assets/graphics/base/scene-communication__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #0f1823 0%, #09121b 100%);
 }
 
 #communication::before {
   background:
+    url("/assets/graphics/overlay/scene-communication__layer-overlay__v01.svg") center / cover
+      no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.006 + var(--ops-scan) * 0.04)) 0%,
@@ -520,6 +560,11 @@ body {
   --ops-darkness: 0.96;
   --ops-scan: 0.08;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.08 + var(--ops-darkness) * 0.12)) 0%,
+      rgb(0 0 0 / calc(0.14 + var(--ops-darkness) * 0.16)) 100%
+    ),
     radial-gradient(
       circle at 20% 24%,
       rgb(63 157 255 / calc(0.1 + var(--ops-glow) * 0.18)),
@@ -530,11 +575,13 @@ body {
       rgb(63 157 255 / calc(0.03 + var(--ops-scan) * 0.1)),
       transparent 40%
     ),
+    url("/assets/graphics/base/scene-command-center__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #0d1b29 0%, #091321 100%);
 }
 
 #command-center::before {
   background:
+    url("/assets/graphics/hud/scene-command-center__layer-hud__v01.svg") center / cover no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.008 + var(--ops-scan) * 0.05)) 0%,
@@ -561,6 +608,11 @@ body {
   --ops-darkness: 0.95;
   --ops-scan: 0.08;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.1 + var(--ops-darkness) * 0.14)) 0%,
+      rgb(0 0 0 / calc(0.16 + var(--ops-darkness) * 0.16)) 100%
+    ),
     radial-gradient(
       circle at 80% 18%,
       rgb(226 0 21 / calc(0.08 + var(--ops-glow) * 0.18)),
@@ -571,11 +623,16 @@ body {
       rgb(63 157 255 / calc(0.05 + var(--ops-scan) * 0.12)),
       transparent 36%
     ),
+    url("/assets/graphics/transition/scene-transformation__layer-before__v01.svg") center / cover
+      no-repeat,
     linear-gradient(165deg, #121b27 0%, #0a131e 100%);
 }
 
 #transformation::before {
+  opacity: calc(0.24 + var(--ops-glow) * 0.34);
   background:
+    url("/assets/graphics/transition/scene-transformation__layer-after__v01.svg") center / cover
+      no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.005 + var(--ops-scan) * 0.04)) 0%,
@@ -607,6 +664,7 @@ body {
       rgb(63 157 255 / calc(0.03 + var(--ops-scan) * 0.08)),
       transparent 42%
     ),
+    url("/assets/graphics/base/scene-cta__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(180deg, #12161e 0%, #0b0f16 100%);
 }
 

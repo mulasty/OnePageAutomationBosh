@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="260" y1="120" x2="2300" y2="1320" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0f2133"/>
+      <stop offset="0.55" stop-color="#0b1a2b"/>
+      <stop offset="1" stop-color="#0a141f"/>
+    </linearGradient>
+    <radialGradient id="pulseA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(780 320) rotate(12) scale(1020 720)">
+      <stop stop-color="#2f5f8f" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#2f5f8f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pulseB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1850 460) rotate(-8) scale(900 620)">
+      <stop stop-color="#1d3d63" stop-opacity="0.44"/>
+      <stop offset="1" stop-color="#1d3d63" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="2560" height="1440" fill="url(#bg)"/>
+  <rect width="2560" height="1440" fill="url(#pulseA)"/>
+  <rect width="2560" height="1440" fill="url(#pulseB)"/>
+  <g opacity="0.24" stroke="#6ca5d8" stroke-width="2">
+    <rect x="260" y="230" width="720" height="390" rx="14"/>
+    <rect x="1060" y="210" width="560" height="240" rx="14"/>
+    <rect x="1680" y="250" width="620" height="340" rx="14"/>
+    <rect x="360" y="690" width="960" height="420" rx="16"/>
+    <rect x="1380" y="680" width="860" height="430" rx="16"/>
+  </g>
+  <g opacity="0.2" stroke="#91bddf" stroke-width="1">
+    <path d="M360 360H920"/>
+    <path d="M360 430H920"/>
+    <path d="M360 500H920"/>
+    <path d="M1440 760H2140"/>
+    <path d="M1440 840H2140"/>
+    <path d="M1440 920H2140"/>
+  </g>
+</svg>
