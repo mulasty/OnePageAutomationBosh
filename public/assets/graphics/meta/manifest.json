@@ -49,6 +49,30 @@
       "mime": "image/svg+xml",
       "sha256": "f997e082ca1f9d404972d1161016d1db526cf1afa45198bee83bd13f43ca2577",
       "status": "integrated"
+    },
+    {
+      "assetId": "scene-transformation__layer-before__v01",
+      "sceneId": "transformation",
+      "layerType": "before",
+      "path": "/assets/graphics/transition/scene-transformation__layer-before__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1478,
+      "mime": "image/svg+xml",
+      "sha256": "34fd75b9d6ca14364d5ef968ef4b8e6d07950f55ca3d0537f24b44fa8f62aa00",
+      "status": "integrated"
+    },
+    {
+      "assetId": "scene-transformation__layer-after__v01",
+      "sceneId": "transformation",
+      "layerType": "after",
+      "path": "/assets/graphics/transition/scene-transformation__layer-after__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1392,
+      "mime": "image/svg+xml",
+      "sha256": "1d4af4c9e4f3b8fc3f1c5d5a48d18d2548e33d1da89274d338eb3c5626c55e72",
+      "status": "integrated"
     }
   ]
 }

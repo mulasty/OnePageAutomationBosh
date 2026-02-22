@@ -581,6 +581,11 @@ body {
   --ops-darkness: 0.95;
   --ops-scan: 0.08;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.1 + var(--ops-darkness) * 0.14)) 0%,
+      rgb(0 0 0 / calc(0.16 + var(--ops-darkness) * 0.16)) 100%
+    ),
     radial-gradient(
       circle at 80% 18%,
       rgb(226 0 21 / calc(0.08 + var(--ops-glow) * 0.18)),
@@ -591,11 +596,16 @@ body {
       rgb(63 157 255 / calc(0.05 + var(--ops-scan) * 0.12)),
       transparent 36%
     ),
+    url("/assets/graphics/transition/scene-transformation__layer-before__v01.svg") center / cover
+      no-repeat,
     linear-gradient(165deg, #121b27 0%, #0a131e 100%);
 }
 
 #transformation::before {
+  opacity: calc(0.24 + var(--ops-glow) * 0.34);
   background:
+    url("/assets/graphics/transition/scene-transformation__layer-after__v01.svg") center / cover
+      no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.005 + var(--ops-scan) * 0.04)) 0%,
