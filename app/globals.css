@@ -382,6 +382,11 @@ body {
   --intake-darkness: 0.96;
   --intake-focus: 0.15;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.08 + var(--intake-darkness) * 0.14)) 0%,
+      rgb(0 0 0 / calc(0.13 + var(--intake-darkness) * 0.16)) 100%
+    ),
     radial-gradient(
       circle at 16% 80%,
       rgb(63 157 255 / calc(0.05 + var(--intake-glow) * 0.12)),
@@ -392,11 +397,13 @@ body {
       rgb(63 157 255 / calc(0.03 + var(--intake-focus) * 0.1)),
       transparent 40%
     ),
+    url("/assets/graphics/base/scene-intake__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #0f1822 0%, #09131c 100%);
 }
 
 #intake::before {
   background:
+    url("/assets/graphics/overlay/scene-intake__layer-overlay__v01.svg") center / cover no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.006 + var(--intake-focus) * 0.05)) 0%,

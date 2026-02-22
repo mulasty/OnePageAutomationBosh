@@ -41,6 +41,12 @@
 
 ### ai-activation
 - Commit: feat(graphics): integrate ai-activation assets
-- Preview URL: pending
+- Preview URL: https://onepageautomationbosh-6aenj28u7-mula-group-s-projects.vercel.app
 - Build: pass
 - Notes: base plus subtle HUD scan integrated for activation moment.
+
+### intake
+- Commit: feat(graphics): integrate intake assets
+- Preview URL: pending
+- Build: pass
+- Notes: clean operational base with readable overlay channels.
