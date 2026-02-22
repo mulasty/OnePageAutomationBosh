@@ -14,3 +14,9 @@
 
 ## Preview and QA
 - Fill one entry per scene after each integration commit.
+
+### hero
+- Commit: feat(graphics): integrate hero assets
+- Preview URL: pending
+- Build: pass
+- Notes: base and overlay integrated, readability preserved in headline area.

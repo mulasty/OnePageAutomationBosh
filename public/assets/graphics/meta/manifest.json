@@ -1,5 +1,30 @@
 {
   "version": 1,
   "createdAt": "2026-02-22",
-  "assets": []
+  "assets": [
+    {
+      "assetId": "scene-hero__layer-base__v01",
+      "sceneId": "hero",
+      "layerType": "base",
+      "path": "/assets/graphics/base/scene-hero__layer-base__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1537,
+      "mime": "image/svg+xml",
+      "sha256": "453358b7b6eab70d147d0a3ba77df1cc82d7afed6aa6f9d570249972b24bd3af",
+      "status": "integrated"
+    },
+    {
+      "assetId": "scene-hero__layer-overlay__v01",
+      "sceneId": "hero",
+      "layerType": "overlay",
+      "path": "/assets/graphics/overlay/scene-hero__layer-overlay__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 963,
+      "mime": "image/svg+xml",
+      "sha256": "8bf99fe3afd24ee2bc9cff239e88ce8047b8a571211c3a37c2f3bfe6f7c0c563",
+      "status": "integrated"
+    }
+  ]
 }

@@ -262,6 +262,11 @@ body {
   --hero-light: 0;
   --hero-darkness: 1;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.12 + var(--hero-darkness) * 0.16)) 0%,
+      rgb(0 0 0 / calc(0.18 + var(--hero-darkness) * 0.2)) 100%
+    ),
     radial-gradient(
       circle at 14% 20%,
       rgb(226 0 21 / calc(0.1 + var(--hero-light) * 0.16)),
@@ -272,7 +277,15 @@ body {
       rgb(63 157 255 / calc(0.04 + var(--hero-light) * 0.12)),
       transparent 44%
     ),
+    url("/assets/graphics/base/scene-hero__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(170deg, #101621 0%, #090e14 100%);
+}
+
+#hero::before {
+  background:
+    url("/assets/graphics/overlay/scene-hero__layer-overlay__v01.svg") center / cover no-repeat,
+    radial-gradient(circle at 76% 22%, var(--bosch-red-soft), transparent 42%),
+    radial-gradient(circle at 21% 82%, var(--ai-blue-soft), transparent 40%);
 }
 
 #hero::after {
