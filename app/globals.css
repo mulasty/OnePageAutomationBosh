@@ -440,11 +440,13 @@ body {
       rgb(63 157 255 / calc(0.02 + var(--planning-grid) * 0.08)),
       transparent 40%
     ),
+    url("/assets/graphics/base/scene-planning__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #121820 0%, #0b1119 100%);
 }
 
 #planning::before {
   background:
+    url("/assets/graphics/overlay/scene-planning__layer-overlay__v01.svg") center / cover no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.004 + var(--planning-grid) * 0.04)) 0%,

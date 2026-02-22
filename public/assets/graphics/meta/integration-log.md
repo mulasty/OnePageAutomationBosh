@@ -47,6 +47,12 @@
 
 ### intake
 - Commit: feat(graphics): integrate intake assets
-- Preview URL: pending
+- Preview URL: https://onepageautomationbosh-bwiksxlke-mula-group-s-projects.vercel.app
 - Build: pass
 - Notes: clean operational base with readable overlay channels.
+
+### planning
+- Commit: feat(graphics): integrate planning assets
+- Preview URL: pending
+- Build: pass
+- Notes: structured planning base with soft grid overlay.

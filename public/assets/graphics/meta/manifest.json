@@ -133,6 +133,30 @@
       "mime": "image/svg+xml",
       "sha256": "2c9012aa087eafe95549d8dde9901142fcb59341a8ee844f62fa0bc35b7de3ef",
       "status": "integrated"
+    },
+    {
+      "assetId": "scene-planning__layer-base__v01",
+      "sceneId": "planning",
+      "layerType": "base",
+      "path": "/assets/graphics/base/scene-planning__layer-base__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1088,
+      "mime": "image/svg+xml",
+      "sha256": "3dad74255a1fbc5c65ff8f3873971b545e12dfa379165e2a2cb3bc95905580d9",
+      "status": "integrated"
+    },
+    {
+      "assetId": "scene-planning__layer-overlay__v01",
+      "sceneId": "planning",
+      "layerType": "overlay",
+      "path": "/assets/graphics/overlay/scene-planning__layer-overlay__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 572,
+      "mime": "image/svg+xml",
+      "sha256": "346ef9327c454e1974d9a2e058ab3b89fca116da3602c8d5e5cf39df19b070fa",
+      "status": "integrated"
     }
   ]
 }
