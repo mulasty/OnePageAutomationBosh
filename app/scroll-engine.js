@@ -84,6 +84,18 @@ export function initScrollExperience() {
         exitToY: -5,
       },
     },
+    sceneProgressRanges: {
+      hero: [0, 0.1],
+      problems: [0.1, 0.2],
+      "ai-activation": [0.2, 0.3],
+      intake: [0.3, 0.4],
+      planning: [0.4, 0.5],
+      parts: [0.5, 0.6],
+      communication: [0.6, 0.7],
+      "command-center": [0.7, 0.85],
+      transformation: [0.85, 0.95],
+      cta: [0.95, 1],
+    },
   };
 
   const state = {
@@ -107,6 +119,40 @@ export function initScrollExperience() {
     state.sections = state.root
       ? Array.from(state.root.querySelectorAll(CONFIG.sectionSelector))
       : [];
+  }
+
+  function getSceneProgressRange(sceneId, index) {
+    const configuredRange = CONFIG.sceneProgressRanges[sceneId];
+    if (Array.isArray(configuredRange) && configuredRange.length === 2) {
+      const start = Math.max(0, Math.min(1, configuredRange[0]));
+      const end = Math.max(start, Math.min(1, configuredRange[1]));
+      return { start, end };
+    }
+
+    const total = Math.max(1, state.sections.length);
+    const start = index / total;
+    const end = (index + 1) / total;
+    return { start, end };
+  }
+
+  function getSceneIndexFromProgress(progress) {
+    if (state.scenes.length === 0) {
+      return 0;
+    }
+
+    const clampedProgress = Math.max(0, Math.min(1, progress));
+    for (let index = 0; index < state.scenes.length; index += 1) {
+      const scene = state.scenes[index];
+      const isLastScene = index === state.scenes.length - 1;
+      const sceneStart = scene.progressRange.start;
+      const sceneEnd = scene.progressRange.end;
+
+      if (clampedProgress >= sceneStart && (clampedProgress < sceneEnd || isLastScene)) {
+        return index;
+      }
+    }
+
+    return state.scenes.length - 1;
   }
 
   function setActiveSection(index) {
@@ -946,6 +992,7 @@ export function initScrollExperience() {
 
   function createSceneModule(section, index) {
     const sceneId = section.id || `scene-${index + 1}`;
+    const progressRange = getSceneProgressRange(sceneId, index);
     const content = section.querySelector(".panel-content") || section;
     const layers = resolveSceneLayers(content);
     const isHero = sceneId === "hero";
@@ -973,6 +1020,7 @@ export function initScrollExperience() {
     return {
       id: sceneId,
       index,
+      progressRange,
       element: section,
       labels: {
         enter: `${sceneId}-enter`,
@@ -1872,60 +1920,16 @@ export function initScrollExperience() {
   }
 
   function getSceneProgress(sceneIndex) {
-    if (!state.masterTimeline || state.masterTimeline.duration() === 0) {
-      return 0;
-    }
-
     const scene = state.scenes[sceneIndex];
     if (!scene) {
       return 0;
     }
 
-    const labelTime = state.masterTimeline.labels[scene.labels.enter];
-    if (typeof labelTime !== "number") {
-      return 0;
-    }
-
-    return labelTime / state.masterTimeline.duration();
+    return scene.progressRange.start;
   }
 
-  function getActiveSceneIndexFromTimeline() {
-    if (!state.masterTimeline || state.scenes.length === 0) {
-      return 0;
-    }
-
-    const labels = state.masterTimeline.labels;
-    const currentTime = state.masterTimeline.time();
-    let resolvedIndex = 0;
-
-    for (let index = 0; index < state.scenes.length; index += 1) {
-      const scene = state.scenes[index];
-      const enterTime = labels[scene.labels.enter];
-
-      if (typeof enterTime !== "number") {
-        continue;
-      }
-
-      if (currentTime < enterTime) {
-        break;
-      }
-
-      const nextScene = state.scenes[index + 1];
-      if (!nextScene) {
-        resolvedIndex = index;
-        break;
-      }
-
-      const nextEnterTime = labels[nextScene.labels.enter];
-      if (typeof nextEnterTime !== "number" || currentTime < nextEnterTime) {
-        resolvedIndex = index;
-        break;
-      }
-
-      resolvedIndex = index + 1;
-    }
-
-    return Math.min(state.scenes.length - 1, Math.max(0, resolvedIndex));
+  function getActiveSceneIndexFromProgress(progress) {
+    return getSceneIndexFromProgress(progress);
   }
 
   function buildMasterTimeline() {
@@ -1962,15 +1966,26 @@ export function initScrollExperience() {
         invalidateOnRefresh: true,
         fastScrollEnd: true,
         anticipatePin: 1,
-        onUpdate: () => {
-          setActiveSection(getActiveSceneIndexFromTimeline());
+        onUpdate: (self) => {
+          setActiveSection(getActiveSceneIndexFromProgress(self.progress));
         },
       },
     });
 
     state.scenes.forEach((scene) => {
       scene.element.setAttribute("data-slot", String(scene.index + 1));
-      addSceneSlot(state.masterTimeline, scene);
+      const sceneTimeline = gsap.timeline({
+        defaults: { ease: "none" },
+      });
+      addSceneSlot(sceneTimeline, scene);
+
+      const rawDuration = sceneTimeline.duration();
+      const sceneDuration = Math.max(0.0001, scene.progressRange.end - scene.progressRange.start);
+      if (rawDuration > 0) {
+        sceneTimeline.timeScale(rawDuration / sceneDuration);
+      }
+
+      state.masterTimeline.add(sceneTimeline, ">");
     });
   }
 
