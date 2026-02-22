@@ -74,3 +74,8 @@
 - Preview URL: https://onepageautomationbosh-iu40bn2rw-mula-group-s-projects.vercel.app
 - Build: pass
 - Notes: calm conversion-focused base with clear CTA readability lane.
+
+## Masterclass Pass (Real Assets Upgrade)
+- Updated scenes: problems, ai-activation, intake, planning, parts, communication, cta.
+- Upgraded layers to real WebP v02 assets with manifest metadata refresh.
+- Transformation before layer remains real WebP (`scene-transformation__layer-before__v02.webp`).
