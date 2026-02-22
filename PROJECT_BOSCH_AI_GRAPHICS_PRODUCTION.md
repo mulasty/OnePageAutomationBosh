@@ -119,16 +119,16 @@ Binary quality rules:
 
 | Scene ID | Progress window | Required assets | Priority | Status |
 | --- | --- | --- | --- | --- |
-| hero | 0-10% | base + subtle light overlay | High | [ ] |
-| problems | 10-20% | darker tone variation base | Medium | [ ] |
-| ai-activation | 20-30% | base + glow/hud overlay | Medium | [ ] |
-| intake | 30-40% | clean base + UI-friendly overlay | Medium | [ ] |
-| planning | 40-50% | structured base + soft grid | Medium | [ ] |
-| parts | 50-60% | organized operations base | Medium | [ ] |
-| communication | 60-70% | communication signal overlay set | Medium | [ ] |
-| command-center | 70-85% | hero dashboard environment + HUD | High | [ ] |
-| transformation | 85-95% | before and after matched pair | High | [ ] |
-| cta | 95-100% | calm high-contrast CTA base | High | [ ] |
+| hero | 0-10% | base + subtle light overlay | High | [x] |
+| problems | 10-20% | darker tone variation base | Medium | [x] |
+| ai-activation | 20-30% | base + glow/hud overlay | Medium | [x] |
+| intake | 30-40% | clean base + UI-friendly overlay | Medium | [x] |
+| planning | 40-50% | structured base + soft grid | Medium | [x] |
+| parts | 50-60% | organized operations base | Medium | [x] |
+| communication | 60-70% | communication signal overlay set | Medium | [x] |
+| command-center | 70-85% | hero dashboard environment + HUD | High | [x] |
+| transformation | 85-95% | before and after matched pair | High | [x] |
+| cta | 95-100% | calm high-contrast CTA base | High | [x] |
 
 ---
 
@@ -179,16 +179,16 @@ Integration workflow per asset batch:
 # 8. Binary Consistency and Validation
 
 Mandatory checks:
-- [ ] manifest entry exists for every shipped asset
-- [ ] MIME type matches extension
-- [ ] file size under limit per asset type
-- [ ] SHA256 checksum recorded
-- [ ] no duplicate binary files under different names
+- [x] manifest entry exists for every shipped asset
+- [x] MIME type matches extension
+- [x] file size under limit per asset type
+- [x] SHA256 checksum recorded
+- [x] no duplicate binary files under different names
 
 Recommended local checks:
-- [ ] list oversized assets and reduce/compress
-- [ ] verify only referenced assets are shipped
-- [ ] remove abandoned drafts before demo branch cut
+- [x] list oversized assets and reduce/compress
+- [x] verify only referenced assets are shipped
+- [x] remove abandoned drafts before demo branch cut
 
 ---
 
@@ -232,13 +232,13 @@ Consistency lock for AI outputs:
 # 10. Integration Checklist Per Pass
 
 After each insertion:
-- [ ] place asset in correct scene folder
-- [ ] update manifest entry
-- [ ] integrate into target scene layer
-- [ ] test text readability
-- [ ] test scroll behavior
-- [ ] test depth/parallax perception
-- [ ] run `npm run build`
+- [x] place asset in correct scene folder
+- [x] update manifest entry
+- [x] integrate into target scene layer
+- [x] test text readability
+- [x] test scroll behavior
+- [x] test depth/parallax perception
+- [x] run `npm run build`
 
 ---
 

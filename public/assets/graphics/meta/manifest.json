@@ -93,9 +93,9 @@
       "path": "/assets/graphics/base/scene-ai-activation__layer-base__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 1353,
+      "bytes": 1352,
       "mime": "image/svg+xml",
-      "sha256": "3cec378879ced6353f6bb70832e2120332156d23f96be707917d6519531d53b0",
+      "sha256": "63eac5717bbe70981aae06c610a422927195c83390a44c548e11729469c7fb6b",
       "status": "integrated"
     },
     {
@@ -105,9 +105,9 @@
       "path": "/assets/graphics/hud/scene-ai-activation__layer-hud__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 651,
+      "bytes": 650,
       "mime": "image/svg+xml",
-      "sha256": "0882a6547547ef72e30b25ff5aeebada45ff8861abbd816cf64669355503877b",
+      "sha256": "4b37ccdc4dc6d8a4aa48291994ac0e3a2ddc41edd0244519acde4c0881d0b415",
       "status": "integrated"
     },
     {
@@ -117,9 +117,9 @@
       "path": "/assets/graphics/base/scene-intake__layer-base__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 1024,
+      "bytes": 1023,
       "mime": "image/svg+xml",
-      "sha256": "c94436dbff0c818aa711596d84c7b4a0cf5032356b39db6a2758095c2a7ac55b",
+      "sha256": "2c69228a9682560c394573f1981c1a7ba687bc6ea0f58b1688db9f919a467608",
       "status": "integrated"
     },
     {
@@ -129,9 +129,9 @@
       "path": "/assets/graphics/overlay/scene-intake__layer-overlay__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 606,
+      "bytes": 605,
       "mime": "image/svg+xml",
-      "sha256": "2c9012aa087eafe95549d8dde9901142fcb59341a8ee844f62fa0bc35b7de3ef",
+      "sha256": "44fd953bfec6b88ce386b66309ff55713ea09a7853cce6dbb7c347ee4a091f55",
       "status": "integrated"
     },
     {
@@ -141,9 +141,9 @@
       "path": "/assets/graphics/base/scene-planning__layer-base__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 1088,
+      "bytes": 1087,
       "mime": "image/svg+xml",
-      "sha256": "3dad74255a1fbc5c65ff8f3873971b545e12dfa379165e2a2cb3bc95905580d9",
+      "sha256": "8834e3211bec9baf73ff42d19acb33d16e9cc163d6eb4ffb5839ae5c2ef381dd",
       "status": "integrated"
     },
     {
@@ -153,9 +153,9 @@
       "path": "/assets/graphics/overlay/scene-planning__layer-overlay__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 572,
+      "bytes": 571,
       "mime": "image/svg+xml",
-      "sha256": "346ef9327c454e1974d9a2e058ab3b89fca116da3602c8d5e5cf39df19b070fa",
+      "sha256": "b80b016320431c5f21b35d971c575ca30ffd2d61e43a5d6c100675b172bb479b",
       "status": "integrated"
     },
     {
@@ -165,9 +165,9 @@
       "path": "/assets/graphics/base/scene-parts__layer-base__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 1150,
+      "bytes": 1149,
       "mime": "image/svg+xml",
-      "sha256": "736bcdf5bf0b5d26146cbfa29fe9844db4eabb4174245e436f76624b21415c5f",
+      "sha256": "1e8b61320c52249ad8e914e707654d30e50d5fe3eea07df024d8f772ab1fe36a",
       "status": "integrated"
     },
     {
@@ -177,9 +177,9 @@
       "path": "/assets/graphics/overlay/scene-parts__layer-overlay__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 588,
+      "bytes": 587,
       "mime": "image/svg+xml",
-      "sha256": "8e281153a97e57583db4e9aefdc2b9830b1a062d5bd89bbfe043cc8fe98dfaf5",
+      "sha256": "8b422a78b67674f958d7c4a3d52f44cf339acf39ffa22b522905d7ad37dd4a9e",
       "status": "integrated"
     },
     {
@@ -189,9 +189,9 @@
       "path": "/assets/graphics/base/scene-communication__layer-base__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 1091,
+      "bytes": 1090,
       "mime": "image/svg+xml",
-      "sha256": "5cf1d32f984c744a66bf49e25e50097c966e80cba9ffb64e2142a6625d301599",
+      "sha256": "4c9bb4b8ca7cc4482eef6494b36651063cca4ca1c71d309cddac7990bf01ab48",
       "status": "integrated"
     },
     {
@@ -201,9 +201,9 @@
       "path": "/assets/graphics/overlay/scene-communication__layer-overlay__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 705,
+      "bytes": 704,
       "mime": "image/svg+xml",
-      "sha256": "7267eebfb3f3155539fe4c0e1fec521cc707aac8cd1d5a19ade579b51d10baa7",
+      "sha256": "47f8b696ee4bb0991ab615545dde2a8ba04f3c6108a128d4c4bf5214b8d8ba8e",
       "status": "integrated"
     },
     {
@@ -213,9 +213,9 @@
       "path": "/assets/graphics/base/scene-cta__layer-base__v01.svg",
       "width": 2560,
       "height": 1440,
-      "bytes": 1146,
+      "bytes": 1145,
       "mime": "image/svg+xml",
-      "sha256": "60d2524f80aa066b9e4301841075ac01d95a58e70339b67813313a48114b8235",
+      "sha256": "5ff507f4c86f217440f1ecd9a75e306454a3a30067ee3e245ba4c1a7625b2f04",
       "status": "integrated"
     }
   ]

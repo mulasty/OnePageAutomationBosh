@@ -107,9 +107,9 @@ Graphics phase must improve visual quality without destabilizing this baseline.
 ## Phase A - High impact visuals (first)
 
 Deliverables:
-- [ ] Hero cinematic background package
-- [ ] Command Center dashboard environment package
-- [ ] Transformation before/after visual package
+- [x] Hero cinematic background package
+- [x] Command Center dashboard environment package
+- [x] Transformation before/after visual package
 
 Acceptance criteria:
 - scene mood is immediately clear
@@ -119,9 +119,9 @@ Acceptance criteria:
 ## Phase B - Supporting visuals
 
 Deliverables:
-- [ ] Workshop support backgrounds
-- [ ] AI overlay and HUD assets
-- [ ] Replacement of remaining non-final visual placeholders
+- [x] Workshop support backgrounds
+- [x] AI overlay and HUD assets
+- [x] Replacement of remaining non-final visual placeholders
 
 Acceptance criteria:
 - supporting scenes remain visually consistent with Phase A
@@ -131,9 +131,9 @@ Acceptance criteria:
 ## Phase C - Final touches
 
 Deliverables:
-- [ ] CTA background
-- [ ] subtle lighting overlays
-- [ ] texture and gradient polish
+- [x] CTA background
+- [x] subtle lighting overlays
+- [x] texture and gradient polish
 
 Acceptance criteria:
 - final section feels intentional, not empty
@@ -145,16 +145,16 @@ Acceptance criteria:
 # 6. Post-Graphics Re-Validation
 
 Run after every integration pass:
-- [ ] Hero integration test
-- [ ] Command Center integration test
-- [ ] Transformation integration test
-- [ ] full scroll visual consistency check
+- [x] Hero integration test
+- [x] Command Center integration test
+- [x] Transformation integration test
+- [x] full scroll visual consistency check
 
 Technical checks after every pass:
-- [ ] `npm run build` passes
+- [x] `npm run build` passes
 - [ ] no console errors
-- [ ] section active-state sync still correct
-- [ ] timeline percentages still preserved
+- [x] section active-state sync still correct
+- [x] timeline percentages still preserved
 
 ---
 
@@ -175,13 +175,13 @@ Checklist:
 # 8. Performance and UX Gate
 
 Performance targets:
-- [ ] all scene images web-optimized and compressed
-- [ ] no oversized visual files loaded at runtime
+- [x] all scene images web-optimized and compressed
+- [x] no oversized visual files loaded at runtime
 - [ ] mobile scroll remains smooth after full asset load
 
 UX targets:
 - [ ] readability on desktop and mobile
-- [ ] animation timing consistency preserved
+- [x] animation timing consistency preserved
 - [ ] no visual hotspot behind key text areas
 
 ---
@@ -189,14 +189,14 @@ UX targets:
 # 9. Quality Gates (GO / NO-GO)
 
 Gate 1 - Asset pack complete:
-- [ ] every scene has required final asset set
-- [ ] naming and folders follow graphics spec
-- [ ] binary manifest complete and valid
+- [x] every scene has required final asset set
+- [x] naming and folders follow graphics spec
+- [x] binary manifest complete and valid
 
 Gate 2 - Integration stable:
 - [ ] all integrated assets pass build and runtime checks
 - [ ] no regressions in motion, sync, or readability
-- [ ] desktop and mobile sanity test complete
+- [x] desktop and mobile sanity test complete
 
 Gate 3 - Demo ready:
 - [ ] intro impact strong in first 10 seconds
@@ -242,10 +242,10 @@ Client understands automation value without extra explanation.
 
 Package must include:
 - [ ] final approved asset set
-- [ ] binary manifest with checksums
-- [ ] final QA pass notes
-- [ ] deployment confirmation and build hash
-- [ ] rollback-ready backup tag/branch
+- [x] binary manifest with checksums
+- [x] final QA pass notes
+- [x] deployment confirmation and build hash
+- [x] rollback-ready backup tag/branch
 
 Done definition:
 - cinematic quality is consistent across all scenes
