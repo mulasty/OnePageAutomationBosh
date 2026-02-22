@@ -71,6 +71,6 @@
 
 ### cta
 - Commit: feat(graphics): integrate cta assets
-- Preview URL: pending
+- Preview URL: https://onepageautomationbosh-iu40bn2rw-mula-group-s-projects.vercel.app
 - Build: pass
 - Notes: calm conversion-focused base with clear CTA readability lane.
