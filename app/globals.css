@@ -277,7 +277,7 @@ body {
       rgb(63 157 255 / calc(0.04 + var(--hero-light) * 0.12)),
       transparent 44%
     ),
-    url("/assets/graphics/base/scene-hero__layer-base__v01.svg") center / cover no-repeat,
+    url("/assets/graphics/base/scene-hero__layer-base__v02.webp") center / cover no-repeat,
     linear-gradient(170deg, #101621 0%, #090e14 100%);
 }
 
@@ -575,7 +575,7 @@ body {
       rgb(63 157 255 / calc(0.03 + var(--ops-scan) * 0.1)),
       transparent 40%
     ),
-    url("/assets/graphics/base/scene-command-center__layer-base__v01.svg") center / cover no-repeat,
+    url("/assets/graphics/base/scene-command-center__layer-base__v02.webp") center / cover no-repeat,
     linear-gradient(165deg, #0d1b29 0%, #091321 100%);
 }
 

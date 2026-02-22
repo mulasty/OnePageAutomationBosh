@@ -3,15 +3,15 @@
   "createdAt": "2026-02-22",
   "assets": [
     {
-      "assetId": "scene-hero__layer-base__v01",
+      "assetId": "scene-hero__layer-base__v02",
       "sceneId": "hero",
       "layerType": "base",
-      "path": "/assets/graphics/base/scene-hero__layer-base__v01.svg",
-      "width": 2560,
-      "height": 1440,
-      "bytes": 1537,
-      "mime": "image/svg+xml",
-      "sha256": "453358b7b6eab70d147d0a3ba77df1cc82d7afed6aa6f9d570249972b24bd3af",
+      "path": "/assets/graphics/base/scene-hero__layer-base__v02.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 117212,
+      "mime": "image/webp",
+      "sha256": "c7058dda75f4d4be719c628d40f2ef03eeb3b5478b9fc7b8bddea2625a8ade93",
       "status": "integrated"
     },
     {
@@ -27,15 +27,15 @@
       "status": "integrated"
     },
     {
-      "assetId": "scene-command-center__layer-base__v01",
+      "assetId": "scene-command-center__layer-base__v02",
       "sceneId": "command-center",
       "layerType": "base",
-      "path": "/assets/graphics/base/scene-command-center__layer-base__v01.svg",
-      "width": 2560,
-      "height": 1440,
-      "bytes": 1738,
-      "mime": "image/svg+xml",
-      "sha256": "cbd1b3e91485d1e470dfcf42f3071151665c2025b4ca501c06562884b87d8af7",
+      "path": "/assets/graphics/base/scene-command-center__layer-base__v02.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 106434,
+      "mime": "image/webp",
+      "sha256": "5d1ab948428b71c71caaffd652d88b8c41ae865e66991437293a387468196a59",
       "status": "integrated"
     },
     {
