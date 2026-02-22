@@ -65,6 +65,12 @@
 
 ### communication
 - Commit: feat(graphics): integrate communication assets
-- Preview URL: pending
+- Preview URL: https://onepageautomationbosh-h5cu9yb3c-mula-group-s-projects.vercel.app
 - Build: pass
 - Notes: communication base plus channel overlay, text corridor preserved in center-left.
+
+### cta
+- Commit: feat(graphics): integrate cta assets
+- Preview URL: pending
+- Build: pass
+- Notes: calm conversion-focused base with clear CTA readability lane.

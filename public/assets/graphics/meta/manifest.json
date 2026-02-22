@@ -205,6 +205,18 @@
       "mime": "image/svg+xml",
       "sha256": "7267eebfb3f3155539fe4c0e1fec521cc707aac8cd1d5a19ade579b51d10baa7",
       "status": "integrated"
+    },
+    {
+      "assetId": "scene-cta__layer-base__v01",
+      "sceneId": "cta",
+      "layerType": "base",
+      "path": "/assets/graphics/base/scene-cta__layer-base__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1146,
+      "mime": "image/svg+xml",
+      "sha256": "60d2524f80aa066b9e4301841075ac01d95a58e70339b67813313a48114b8235",
+      "status": "integrated"
     }
   ]
 }

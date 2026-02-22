@@ -664,6 +664,7 @@ body {
       rgb(63 157 255 / calc(0.03 + var(--ops-scan) * 0.08)),
       transparent 42%
     ),
+    url("/assets/graphics/base/scene-cta__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(180deg, #12161e 0%, #0b0f16 100%);
 }
 
