@@ -623,7 +623,7 @@ body {
       rgb(63 157 255 / calc(0.05 + var(--ops-scan) * 0.12)),
       transparent 36%
     ),
-    url("/assets/graphics/transition/scene-transformation__layer-before__v01.svg") center / cover
+    url("/assets/graphics/transition/scene-transformation__layer-before__v02.webp") center / cover
       no-repeat,
     linear-gradient(165deg, #121b27 0%, #0a131e 100%);
 }

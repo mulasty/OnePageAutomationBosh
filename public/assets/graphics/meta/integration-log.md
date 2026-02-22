@@ -31,7 +31,7 @@
 - Commit: feat(graphics): integrate transformation assets
 - Preview URL: https://onepageautomationbosh-ns5o7l7m3-mula-group-s-projects.vercel.app
 - Build: pass
-- Notes: matched before/after pair integrated with controlled overlay opacity.
+- Notes: matched before/after pair integrated with controlled overlay opacity. Before layer upgraded to real asset `scene-transformation__layer-before__v02.webp`.
 
 ### problems
 - Commit: feat(graphics): integrate problems assets
