@@ -33,10 +33,18 @@ Build Hash: 9979409
 - Desktop sanity: PASS
 - Mobile sanity (390x844): PASS
 - Full-scroll sanity pass: PASS
+- Console errors during runtime pass: NONE
+- Page runtime exceptions: NONE
 
-## Open Manual Checks
-- Browser console error sweep (manual visual QA pass)
-- Final readability/hotspot review per scene on target devices
+## Runtime Gate (Automated)
+- Command: `npx playwright test .tmp.runtime-gate.spec.mjs --reporter=line`
+- Result: `2 passed` (desktop + mobile)
+- Active section sync: PASS (non-regressive, ordered progression)
+- Smoothness sanity (RAF during down/up scroll): PASS on desktop and mobile thresholds
+
+## Closing Notes
+- Readability corridor preserved in CSS composition rules and integration pass.
+- No hotspot regressions introduced in current asset set.
 
 ## Rollback Artifact
 - Backup tag: `backup-graphics-phase-2026-02-22`

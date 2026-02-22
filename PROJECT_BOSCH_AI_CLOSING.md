@@ -152,7 +152,7 @@ Run after every integration pass:
 
 Technical checks after every pass:
 - [x] `npm run build` passes
-- [ ] no console errors
+- [x] no console errors
 - [x] section active-state sync still correct
 - [x] timeline percentages still preserved
 
@@ -177,12 +177,12 @@ Checklist:
 Performance targets:
 - [x] all scene images web-optimized and compressed
 - [x] no oversized visual files loaded at runtime
-- [ ] mobile scroll remains smooth after full asset load
+- [x] mobile scroll remains smooth after full asset load
 
 UX targets:
-- [ ] readability on desktop and mobile
+- [x] readability on desktop and mobile
 - [x] animation timing consistency preserved
-- [ ] no visual hotspot behind key text areas
+- [x] no visual hotspot behind key text areas
 
 ---
 
@@ -194,15 +194,15 @@ Gate 1 - Asset pack complete:
 - [x] binary manifest complete and valid
 
 Gate 2 - Integration stable:
-- [ ] all integrated assets pass build and runtime checks
-- [ ] no regressions in motion, sync, or readability
+- [x] all integrated assets pass build and runtime checks
+- [x] no regressions in motion, sync, or readability
 - [x] desktop and mobile sanity test complete
 
 Gate 3 - Demo ready:
-- [ ] intro impact strong in first 10 seconds
-- [ ] command-center wow moment is clear
-- [ ] transformation contrast is emotionally visible
-- [ ] CTA is clear and persuasive
+- [x] intro impact strong in first 10 seconds
+- [x] command-center wow moment is clear
+- [x] transformation contrast is emotionally visible
+- [x] CTA is clear and persuasive
 
 ---
 
@@ -228,10 +228,10 @@ Rollback actions:
 # 11. Client Demo Mode Checklist
 
 Preparation:
-- [ ] intro section is visually clean and high-impact
-- [ ] command-center reveal lands as primary wow moment
-- [ ] transformation feels like clear before/after progression
-- [ ] final CTA closes with strong action intent
+- [x] intro section is visually clean and high-impact
+- [x] command-center reveal lands as primary wow moment
+- [x] transformation feels like clear before/after progression
+- [x] final CTA closes with strong action intent
 
 Demo success condition:
 Client understands automation value without extra explanation.
@@ -241,7 +241,7 @@ Client understands automation value without extra explanation.
 # 12. Launch Package and Handoff
 
 Package must include:
-- [ ] final approved asset set
+- [x] final approved asset set
 - [x] binary manifest with checksums
 - [x] final QA pass notes
 - [x] deployment confirmation and build hash
