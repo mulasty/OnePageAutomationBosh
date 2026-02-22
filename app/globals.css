@@ -533,6 +533,11 @@ body {
   --ops-darkness: 0.96;
   --ops-scan: 0.08;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.08 + var(--ops-darkness) * 0.12)) 0%,
+      rgb(0 0 0 / calc(0.14 + var(--ops-darkness) * 0.16)) 100%
+    ),
     radial-gradient(
       circle at 20% 24%,
       rgb(63 157 255 / calc(0.1 + var(--ops-glow) * 0.18)),
@@ -543,11 +548,13 @@ body {
       rgb(63 157 255 / calc(0.03 + var(--ops-scan) * 0.1)),
       transparent 40%
     ),
+    url("/assets/graphics/base/scene-command-center__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #0d1b29 0%, #091321 100%);
 }
 
 #command-center::before {
   background:
+    url("/assets/graphics/hud/scene-command-center__layer-hud__v01.svg") center / cover no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.008 + var(--ops-scan) * 0.05)) 0%,

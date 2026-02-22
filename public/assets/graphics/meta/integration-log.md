@@ -17,6 +17,12 @@
 
 ### hero
 - Commit: feat(graphics): integrate hero assets
-- Preview URL: pending
+- Preview URL: https://onepageautomationbosh-pb8qm0g2b-mula-group-s-projects.vercel.app
 - Build: pass
 - Notes: base and overlay integrated, readability preserved in headline area.
+
+### command-center
+- Commit: feat(graphics): integrate command-center assets
+- Preview URL: pending
+- Build: pass
+- Notes: premium dashboard base plus HUD layer integrated, central text corridor preserved.

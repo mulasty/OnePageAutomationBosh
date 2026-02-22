@@ -25,6 +25,30 @@
       "mime": "image/svg+xml",
       "sha256": "8bf99fe3afd24ee2bc9cff239e88ce8047b8a571211c3a37c2f3bfe6f7c0c563",
       "status": "integrated"
+    },
+    {
+      "assetId": "scene-command-center__layer-base__v01",
+      "sceneId": "command-center",
+      "layerType": "base",
+      "path": "/assets/graphics/base/scene-command-center__layer-base__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1738,
+      "mime": "image/svg+xml",
+      "sha256": "cbd1b3e91485d1e470dfcf42f3071151665c2025b4ca501c06562884b87d8af7",
+      "status": "integrated"
+    },
+    {
+      "assetId": "scene-command-center__layer-hud__v01",
+      "sceneId": "command-center",
+      "layerType": "hud",
+      "path": "/assets/graphics/hud/scene-command-center__layer-hud__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1034,
+      "mime": "image/svg+xml",
+      "sha256": "f997e082ca1f9d404972d1161016d1db526cf1afa45198bee83bd13f43ca2577",
+      "status": "integrated"
     }
   ]
 }
