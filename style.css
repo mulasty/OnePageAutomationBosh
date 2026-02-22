@@ -205,9 +205,44 @@ body {
 }
 
 #ai-activation {
+  --activation-glow: 0.2;
+  --activation-darkness: 0.98;
+  --activation-scan: 0.05;
   background:
-    radial-gradient(circle at 82% 18%, rgba(63, 157, 255, 0.22), transparent 34%),
+    radial-gradient(
+      circle at 82% 18%,
+      rgb(63 157 255 / calc(0.08 + var(--activation-glow) * 0.2)),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at 20% 78%,
+      rgb(63 157 255 / calc(0.03 + var(--activation-glow) * 0.12)),
+      transparent 42%
+    ),
     linear-gradient(165deg, #101824 0%, #08111c 100%);
+}
+
+#ai-activation::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgb(63 157 255 / calc(0.01 + var(--activation-scan) * 0.06)) 0%,
+      rgb(63 157 255 / calc(0.005 + var(--activation-scan) * 0.03)) 100%
+    ),
+    radial-gradient(
+      circle at 68% 30%,
+      rgb(63 157 255 / calc(0.04 + var(--activation-glow) * 0.1)),
+      transparent 48%
+    );
+}
+
+#ai-activation::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.1 + var(--activation-darkness) * 0.24)) 0%,
+      rgb(0 0 0 / calc(0.18 + var(--activation-darkness) * 0.3)) 100%
+    );
 }
 
 #intake {
