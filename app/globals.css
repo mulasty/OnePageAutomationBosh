@@ -69,6 +69,13 @@ body {
   background: rgba(226, 0, 21, 0.12);
 }
 
+.nav-list a[aria-current="true"] {
+  color: var(--text-primary);
+  border-color: var(--bosch-red);
+  background: rgba(226, 0, 21, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(226, 0, 21, 0.24);
+}
+
 .panel {
   min-height: 100vh;
   display: flex;
@@ -111,6 +118,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: linear-gradient(145deg, rgba(13, 17, 24, 0.86), rgba(11, 15, 22, 0.84));
   box-shadow: var(--shadow-soft);
+  contain: layout paint;
 }
 
 .panel-content h1,
@@ -426,32 +434,321 @@ body {
 }
 
 #parts {
+  --ops-glow: 0.22;
+  --ops-darkness: 0.96;
+  --ops-scan: 0.08;
   background:
-    radial-gradient(circle at 26% 18%, rgba(226, 0, 21, 0.18), transparent 32%),
+    radial-gradient(
+      circle at 26% 18%,
+      rgb(226 0 21 / calc(0.06 + var(--ops-glow) * 0.16)),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 76% 82%,
+      rgb(63 157 255 / calc(0.02 + var(--ops-scan) * 0.1)),
+      transparent 38%
+    ),
     linear-gradient(165deg, #12161f 0%, #0a1119 100%);
 }
 
-#communication {
+#parts::before {
   background:
-    radial-gradient(circle at 84% 78%, rgba(63, 157, 255, 0.18), transparent 34%),
+    linear-gradient(
+      180deg,
+      rgb(63 157 255 / calc(0.005 + var(--ops-scan) * 0.04)) 0%,
+      rgb(63 157 255 / calc(0.002 + var(--ops-scan) * 0.025)) 100%
+    ),
+    radial-gradient(
+      circle at 66% 22%,
+      rgb(226 0 21 / calc(0.03 + var(--ops-glow) * 0.08)),
+      transparent 48%
+    );
+}
+
+#parts::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.12 + var(--ops-darkness) * 0.22)) 0%,
+      rgb(0 0 0 / calc(0.2 + var(--ops-darkness) * 0.3)) 100%
+    );
+}
+
+#communication {
+  --ops-glow: 0.16;
+  --ops-darkness: 0.98;
+  --ops-scan: 0.06;
+  background:
+    radial-gradient(
+      circle at 84% 78%,
+      rgb(63 157 255 / calc(0.08 + var(--ops-glow) * 0.14)),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 22% 22%,
+      rgb(226 0 21 / calc(0.03 + var(--ops-scan) * 0.08)),
+      transparent 36%
+    ),
     linear-gradient(165deg, #0f1823 0%, #09121b 100%);
 }
 
-#command-center {
+#communication::before {
   background:
-    radial-gradient(circle at 20% 24%, rgba(63, 157, 255, 0.2), transparent 38%),
+    linear-gradient(
+      180deg,
+      rgb(63 157 255 / calc(0.006 + var(--ops-scan) * 0.04)) 0%,
+      rgb(63 157 255 / calc(0.003 + var(--ops-scan) * 0.025)) 100%
+    ),
+    radial-gradient(
+      circle at 74% 28%,
+      rgb(63 157 255 / calc(0.03 + var(--ops-glow) * 0.1)),
+      transparent 46%
+    );
+}
+
+#communication::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.12 + var(--ops-darkness) * 0.22)) 0%,
+      rgb(0 0 0 / calc(0.2 + var(--ops-darkness) * 0.3)) 100%
+    );
+}
+
+#command-center {
+  --ops-glow: 0.24;
+  --ops-darkness: 0.96;
+  --ops-scan: 0.08;
+  background:
+    radial-gradient(
+      circle at 20% 24%,
+      rgb(63 157 255 / calc(0.1 + var(--ops-glow) * 0.18)),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 78% 82%,
+      rgb(63 157 255 / calc(0.03 + var(--ops-scan) * 0.1)),
+      transparent 40%
+    ),
     linear-gradient(165deg, #0d1b29 0%, #091321 100%);
 }
 
-#transformation {
+#command-center::before {
   background:
-    radial-gradient(circle at 80% 18%, rgba(226, 0, 21, 0.22), transparent 36%),
-    radial-gradient(circle at 18% 84%, rgba(63, 157, 255, 0.16), transparent 36%),
+    linear-gradient(
+      180deg,
+      rgb(63 157 255 / calc(0.008 + var(--ops-scan) * 0.05)) 0%,
+      rgb(63 157 255 / calc(0.004 + var(--ops-scan) * 0.03)) 100%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 30px,
+      rgb(63 157 255 / calc(var(--ops-scan) * 0.08)) 30px 31px
+    );
+}
+
+#command-center::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.1 + var(--ops-darkness) * 0.2)) 0%,
+      rgb(0 0 0 / calc(0.18 + var(--ops-darkness) * 0.28)) 100%
+    );
+}
+
+#transformation {
+  --ops-glow: 0.24;
+  --ops-darkness: 0.95;
+  --ops-scan: 0.08;
+  background:
+    radial-gradient(
+      circle at 80% 18%,
+      rgb(226 0 21 / calc(0.08 + var(--ops-glow) * 0.18)),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at 18% 84%,
+      rgb(63 157 255 / calc(0.05 + var(--ops-scan) * 0.12)),
+      transparent 36%
+    ),
     linear-gradient(165deg, #121b27 0%, #0a131e 100%);
 }
 
-#cta {
+#transformation::before {
   background:
-    radial-gradient(circle at 52% 22%, rgba(226, 0, 21, 0.26), transparent 44%),
+    linear-gradient(
+      180deg,
+      rgb(63 157 255 / calc(0.005 + var(--ops-scan) * 0.04)) 0%,
+      rgb(226 0 21 / calc(0.004 + var(--ops-scan) * 0.04)) 100%
+    );
+}
+
+#transformation::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.1 + var(--ops-darkness) * 0.2)) 0%,
+      rgb(0 0 0 / calc(0.18 + var(--ops-darkness) * 0.28)) 100%
+    );
+}
+
+#cta {
+  --ops-glow: 0.2;
+  --ops-darkness: 0.92;
+  --ops-scan: 0.06;
+  background:
+    radial-gradient(
+      circle at 52% 22%,
+      rgb(226 0 21 / calc(0.1 + var(--ops-glow) * 0.2)),
+      transparent 44%
+    ),
+    radial-gradient(
+      circle at 36% 80%,
+      rgb(63 157 255 / calc(0.03 + var(--ops-scan) * 0.08)),
+      transparent 42%
+    ),
     linear-gradient(180deg, #12161e 0%, #0b0f16 100%);
+}
+
+#cta::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgb(226 0 21 / calc(0.006 + var(--ops-scan) * 0.05)) 0%,
+      rgb(63 157 255 / calc(0.003 + var(--ops-scan) * 0.02)) 100%
+    );
+}
+
+#cta::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.08 + var(--ops-darkness) * 0.2)) 0%,
+      rgb(0 0 0 / calc(0.16 + var(--ops-darkness) * 0.28)) 100%
+    );
+}
+
+@media (max-width: 1024px) {
+  .panel {
+    padding: 5.4rem 1rem 1.7rem;
+  }
+
+  .panel-content {
+    max-width: 680px;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-list {
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+    padding: 0.66rem 0.78rem 0.72rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .nav-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-list li {
+    flex: 0 0 auto;
+  }
+
+  .nav-list a {
+    font-size: 0.76rem;
+    padding: 0.3rem 0.54rem;
+  }
+
+  .panel {
+    align-items: flex-start;
+    padding: 5.2rem 0.8rem 1.35rem;
+  }
+
+  .panel::before {
+    opacity: 0.42;
+  }
+
+  .panel::after {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.28) 100%);
+  }
+
+  .panel-content {
+    max-width: 100%;
+    padding: 1.12rem 1rem;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+  }
+
+  .panel-content h1,
+  .panel-content h2 {
+    font-size: clamp(1.72rem, 8vw, 2.36rem);
+    margin-bottom: 0.58rem;
+    line-height: 1.08;
+  }
+
+  .panel-content p {
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  .hero-cta {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.66rem 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  .intake-step,
+  .planning-source-card,
+  .planning-slot {
+    font-size: 0.82rem;
+  }
+
+  .planning-board {
+    grid-template-columns: 1fr;
+    gap: 0.42rem;
+  }
+
+  .planning-piece {
+    min-height: 2.2rem;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav-list {
+    gap: 0.34rem;
+    padding: 0.58rem 0.56rem 0.64rem;
+  }
+
+  .nav-list a {
+    font-size: 0.7rem;
+    padding: 0.26rem 0.45rem;
+  }
+
+  .panel {
+    padding: 4.9rem 0.62rem 1.2rem;
+  }
+
+  .panel-content {
+    padding: 0.96rem 0.84rem;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+  }
+
+  .panel-content h1,
+  .panel-content h2 {
+    font-size: clamp(1.56rem, 9vw, 2.08rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .panel-content p {
+    font-size: 0.92rem;
+  }
+
+  .intake-step--processing::after {
+    left: 0.55rem;
+    right: 0.55rem;
+  }
 }

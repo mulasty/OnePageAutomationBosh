@@ -5,6 +5,58 @@ export function initScrollExperience() {
   if (typeof window === "undefined" || typeof document === "undefined") {
     return () => {};
   }
+
+  function mediaMatches(query) {
+    return typeof window.matchMedia === "function" && window.matchMedia(query).matches;
+  }
+
+  function getRuntimeProfile() {
+    const isMobileViewport = mediaMatches("(max-width: 900px)");
+    const prefersReducedMotion = mediaMatches("(prefers-reduced-motion: reduce)");
+    const depthScale = prefersReducedMotion ? 0.45 : isMobileViewport ? 0.72 : 1;
+    const phaseDuration = prefersReducedMotion
+      ? { enter: 0.12, active: 0.28, exit: 0.12 }
+      : isMobileViewport
+        ? { enter: 0.18, active: 0.52, exit: 0.18 }
+        : { enter: 0.2, active: 0.6, exit: 0.2 };
+
+    return {
+      isMobileViewport,
+      prefersReducedMotion,
+      useInstantNavScroll: prefersReducedMotion || isMobileViewport,
+      scrub: prefersReducedMotion ? 0.35 : isMobileViewport ? 0.9 : 1.2,
+      depthScale,
+      phaseDuration,
+    };
+  }
+
+  function applyRuntimeProfile() {
+    const profile = getRuntimeProfile();
+    const scale = profile.depthScale;
+    const depthValue = (value) => Number((value * scale).toFixed(3));
+
+    state.runtimeProfile = profile;
+    CONFIG.scrub = profile.scrub;
+    CONFIG.phaseDuration = profile.phaseDuration;
+    CONFIG.depthMotion = {
+      background: {
+        enterFromY: depthValue(1.5),
+        activeToY: depthValue(-1.2),
+        exitToY: depthValue(-1.8),
+      },
+      midground: {
+        enterFromY: depthValue(3),
+        activeToY: depthValue(-2.4),
+        exitToY: depthValue(-3.4),
+      },
+      foreground: {
+        enterFromY: depthValue(4.5),
+        activeToY: depthValue(-3.6),
+        exitToY: depthValue(-5),
+      },
+    };
+  }
+
   const CONFIG = {
     rootSelector: "#scroll-root",
     sectionSelector: ".panel",
@@ -43,6 +95,7 @@ export function initScrollExperience() {
     resizeTimer: null,
     navList: null,
     onResize: null,
+    runtimeProfile: null,
   };
 
   function hasEngineDependencies() {
@@ -66,6 +119,26 @@ export function initScrollExperience() {
     });
 
     state.activeSectionIndex = index;
+    syncNavActiveItem(index);
+  }
+
+  function syncNavActiveItem(index) {
+    if (!state.navList) {
+      return;
+    }
+
+    const activeSection = index >= 0 ? state.sections[index] : null;
+    const activeHref = activeSection ? `#${activeSection.id}` : null;
+    const links = state.navList.querySelectorAll('a[href^="#"]');
+
+    links.forEach((link) => {
+      if (activeHref && link.getAttribute("href") === activeHref) {
+        link.setAttribute("aria-current", "true");
+        return;
+      }
+
+      link.removeAttribute("aria-current");
+    });
   }
 
   function resolveSceneLayers(content) {
@@ -122,7 +195,7 @@ export function initScrollExperience() {
     cta.href = "#cta";
     cta.className = "hero-cta";
     cta.dataset.heroCta = "true";
-    cta.textContent = "[Placeholder: Hero CTA]";
+    cta.textContent = "Book 30-min AI Blueprint";
     content.appendChild(cta);
 
     return cta;
@@ -360,17 +433,17 @@ export function initScrollExperience() {
     const request = document.createElement("div");
     request.className = "intake-step intake-step--request";
     request.dataset.intakeStep = "request";
-    request.textContent = "[Placeholder: Incoming service request]";
+    request.textContent = "Incoming request captured in under 15 seconds";
 
     const processing = document.createElement("div");
     processing.className = "intake-step intake-step--processing";
     processing.dataset.intakeStep = "processing";
-    processing.textContent = "[Placeholder: AI processing intake data]";
+    processing.textContent = "AI checks urgency, vehicle data, and customer history";
 
     const card = document.createElement("div");
     card.className = "intake-step intake-step--card";
     card.dataset.intakeStep = "card";
-    card.textContent = "[Placeholder: Service card generated]";
+    card.textContent = "Service card generated automatically with 60% less admin time";
 
     flow.append(request, processing, card);
     content.appendChild(flow);
@@ -499,15 +572,15 @@ export function initScrollExperience() {
     const sourceCard = document.createElement("div");
     sourceCard.className = "planning-source-card";
     sourceCard.dataset.planningPart = "source-card";
-    sourceCard.textContent = "[Placeholder: Service card moved from intake]";
+    sourceCard.textContent = "Ready card moved from intake to planning board";
 
     const board = document.createElement("div");
     board.className = "planning-board";
 
     const pieceLabels = [
-      "[Placeholder: Job block A]",
-      "[Placeholder: Job block B]",
-      "[Placeholder: Job block C]",
+      "Job block A - same day diagnostics",
+      "Job block B - high-margin maintenance",
+      "Job block C - pickup-ready repairs",
     ];
 
     const pieces = pieceLabels.map((label) => {
@@ -525,9 +598,9 @@ export function initScrollExperience() {
     timeline.dataset.planningPart = "timeline";
 
     const slotLabels = [
-      "[Placeholder: Slot 1 - Priority job]",
-      "[Placeholder: Slot 2 - Parts preparation]",
-      "[Placeholder: Slot 3 - Delivery window]",
+      "Slot 1 - Priority intake (0-2h)",
+      "Slot 2 - Parts preparation (-40% waiting)",
+      "Slot 3 - Delivery window with customer ETA",
     ];
 
     const timelineSlots = slotLabels.map((label) => {
@@ -720,6 +793,157 @@ export function initScrollExperience() {
     };
   }
 
+  function createOperationalRevealConfig(sceneId, content) {
+    const heading = content.querySelector("h1, h2");
+    const subtitle = content.querySelector("p");
+    const items = [heading, subtitle].filter(Boolean);
+    const presetByScene = {
+      parts: {
+        glowFrom: 0.22,
+        darknessFrom: 0.96,
+        scanFrom: 0.08,
+        glowTo: 0.74,
+        darknessTo: 0.74,
+        scanTo: 0.62,
+        glowActive: 0.9,
+        darknessActive: 0.62,
+        scanActive: 0.92,
+        glowExit: 0.68,
+        darknessExit: 0.7,
+        scanExit: 0.76,
+        driftX: 1.4,
+      },
+      communication: {
+        glowFrom: 0.16,
+        darknessFrom: 0.98,
+        scanFrom: 0.06,
+        glowTo: 0.68,
+        darknessTo: 0.72,
+        scanTo: 0.66,
+        glowActive: 0.82,
+        darknessActive: 0.6,
+        scanActive: 1,
+        glowExit: 0.62,
+        darknessExit: 0.68,
+        scanExit: 0.84,
+        driftX: -1.5,
+      },
+      "command-center": {
+        glowFrom: 0.24,
+        darknessFrom: 0.96,
+        scanFrom: 0.08,
+        glowTo: 0.82,
+        darknessTo: 0.66,
+        scanTo: 0.78,
+        glowActive: 1,
+        darknessActive: 0.52,
+        scanActive: 1,
+        glowExit: 0.78,
+        darknessExit: 0.62,
+        scanExit: 0.86,
+        driftX: 1.8,
+      },
+      transformation: {
+        glowFrom: 0.24,
+        darknessFrom: 0.95,
+        scanFrom: 0.08,
+        glowTo: 0.9,
+        darknessTo: 0.6,
+        scanTo: 0.72,
+        glowActive: 1.05,
+        darknessActive: 0.46,
+        scanActive: 0.96,
+        glowExit: 0.86,
+        darknessExit: 0.58,
+        scanExit: 0.8,
+        driftX: 1.2,
+      },
+      cta: {
+        glowFrom: 0.2,
+        darknessFrom: 0.92,
+        scanFrom: 0.06,
+        glowTo: 0.82,
+        darknessTo: 0.56,
+        scanTo: 0.66,
+        glowActive: 0.96,
+        darknessActive: 0.42,
+        scanActive: 0.82,
+        glowExit: 0.9,
+        darknessExit: 0.5,
+        scanExit: 0.72,
+        driftX: -1.1,
+      },
+    };
+    const preset = presetByScene[sceneId] || presetByScene.parts;
+
+    return {
+      items,
+      toneFrom: {
+        "--ops-glow": preset.glowFrom,
+        "--ops-darkness": preset.darknessFrom,
+        "--ops-scan": preset.scanFrom,
+      },
+      toneTo: {
+        "--ops-glow": preset.glowTo,
+        "--ops-darkness": preset.darknessTo,
+        "--ops-scan": preset.scanTo,
+        duration: CONFIG.phaseDuration.enter,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      toneActiveTo: {
+        "--ops-glow": preset.glowActive,
+        "--ops-darkness": preset.darknessActive,
+        "--ops-scan": preset.scanActive,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      },
+      toneExitTo: {
+        "--ops-glow": preset.glowExit,
+        "--ops-darkness": preset.darknessExit,
+        "--ops-scan": preset.scanExit,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      itemFromFactory: (index) => ({
+        autoAlpha: 0,
+        y: 20 + index * 8,
+        x: preset.driftX * (index + 1) * 1.6,
+        scale: 0.986,
+      }),
+      itemToFactory: () => ({
+        autoAlpha: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+        duration: CONFIG.phaseDuration.enter * 0.65,
+        ease: "power2.out",
+        overwrite: "auto",
+      }),
+      itemActiveToFactory: (index) => ({
+        autoAlpha: 1,
+        y: index === 0 ? -2.3 : -1.6,
+        x: preset.driftX * 0.32,
+        scale: 1,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      }),
+      itemExitToFactory: (index) => ({
+        autoAlpha: index === 0 ? 0.9 : 0.84,
+        y: -4,
+        x: preset.driftX * 0.25,
+        scale: 0.996,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      }),
+      staggerStep: 0.085,
+    };
+  }
+
   function createSceneModule(section, index) {
     const sceneId = section.id || `scene-${index + 1}`;
     const content = section.querySelector(".panel-content") || section;
@@ -729,11 +953,18 @@ export function initScrollExperience() {
     const isAiActivation = sceneId === "ai-activation";
     const isIntake = sceneId === "intake";
     const isPlanning = sceneId === "planning";
+    const isOperational =
+      sceneId === "parts" ||
+      sceneId === "communication" ||
+      sceneId === "command-center" ||
+      sceneId === "transformation" ||
+      sceneId === "cta";
     const heroReveal = isHero ? createHeroRevealConfig(content) : null;
     const problemsReveal = isProblems ? createProblemsRevealConfig(content) : null;
     const aiActivationReveal = isAiActivation ? createAiActivationRevealConfig(content) : null;
     const intakeReveal = isIntake ? createIntakeRevealConfig(content) : null;
     const planningReveal = isPlanning ? createPlanningRevealConfig(content) : null;
+    const operationalReveal = isOperational ? createOperationalRevealConfig(sceneId, content) : null;
 
     section.setAttribute("data-scene-id", sceneId);
     section.setAttribute("data-scene-index", String(index));
@@ -763,16 +994,24 @@ export function initScrollExperience() {
       intakeReveal,
       isPlanning,
       planningReveal,
+      isOperational,
+      operationalReveal,
       layers,
       motion: {
         target:
-          isHero || isProblems || isAiActivation || isIntake || isPlanning
+          isHero || isProblems || isAiActivation || isIntake || isPlanning || isOperational
             ? content
             : layers.foreground.target || content,
         enterFrom: {
-          autoAlpha: isHero || isProblems || isAiActivation || isIntake || isPlanning ? 1 : 0.35,
+          autoAlpha:
+            isHero || isProblems || isAiActivation || isIntake || isPlanning || isOperational
+              ? 1
+              : 0.35,
           yPercent: 0,
-          scale: isHero || isProblems || isAiActivation || isIntake || isPlanning ? 1 : 0.992,
+          scale:
+            isHero || isProblems || isAiActivation || isIntake || isPlanning || isOperational
+              ? 1
+              : 0.992,
         },
         enterTo: {
           autoAlpha: 1,
@@ -1020,6 +1259,18 @@ export function initScrollExperience() {
         });
       }
 
+      if (scene.isOperational && scene.operationalReveal) {
+        gsap.set(scene.element, scene.operationalReveal.toneFrom);
+
+        scene.operationalReveal.items.forEach((item, index) => {
+          gsap.set(item, {
+            ...scene.operationalReveal.itemFromFactory(index),
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        });
+      }
+
       gsap.set(scene.motion.target, {
         autoAlpha: index === 0 ? 1 : scene.motion.enterFrom.autoAlpha,
         yPercent: index === 0 ? 0 : scene.motion.enterFrom.yPercent,
@@ -1076,6 +1327,10 @@ export function initScrollExperience() {
       addPlanningSceneSlot(masterTimeline, scene, isLastScene);
       return;
     }
+    if (scene.isOperational && scene.operationalReveal) {
+      addOperationalSceneSlot(masterTimeline, scene, isLastScene);
+      return;
+    }
 
     masterTimeline.addLabel(scene.labels.enter);
     masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
@@ -1101,6 +1356,72 @@ export function initScrollExperience() {
     addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.exitTo, "<");
     addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.exitTo, "<");
     addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.exitTo, "<");
+
+    addSceneShift(masterTimeline, scene.index, isLastScene);
+  }
+
+  function addOperationalSceneSlot(masterTimeline, scene, isLastScene) {
+    const operational = scene.operationalReveal;
+
+    masterTimeline.addLabel(scene.labels.enter);
+    masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
+    masterTimeline.fromTo(scene.element, operational.toneFrom, operational.toneTo);
+
+    addDepthTween(
+      masterTimeline,
+      scene.layers.background.target,
+      scene.depth.background.enterFrom,
+      scene.depth.background.enterTo,
+      "<"
+    );
+    addDepthTween(
+      masterTimeline,
+      scene.layers.midground.target,
+      scene.depth.midground.enterFrom,
+      scene.depth.midground.enterTo,
+      "<"
+    );
+    addDepthTween(
+      masterTimeline,
+      scene.layers.foreground.target,
+      scene.depth.foreground.enterFrom,
+      scene.depth.foreground.enterTo,
+      "<"
+    );
+
+    operational.items.forEach((item, index) => {
+      addElementTween(
+        masterTimeline,
+        item,
+        operational.itemFromFactory(index),
+        operational.itemToFactory(),
+        index === 0 ? "<+0.06" : `<+${operational.staggerStep}`
+      );
+    });
+
+    masterTimeline.addLabel(scene.labels.active);
+    masterTimeline.call(() => runScenePhase(scene, "active"), null, ">");
+    masterTimeline.to(scene.element, operational.toneActiveTo);
+
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.activeTo, "<");
+
+    operational.items.forEach((item, index) => {
+      addElementTween(masterTimeline, item, null, operational.itemActiveToFactory(index), "<");
+    });
+
+    masterTimeline.addLabel(scene.labels.exit);
+    masterTimeline.call(() => runScenePhase(scene, "exit"), null, ">");
+    masterTimeline.to(scene.element, operational.toneExitTo);
+
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.exitTo, "<");
+
+    operational.items.forEach((item, index) => {
+      addElementTween(masterTimeline, item, null, operational.itemExitToFactory(index), "<");
+    });
 
     addSceneShift(masterTimeline, scene.index, isLastScene);
   }
@@ -1568,9 +1889,49 @@ export function initScrollExperience() {
     return labelTime / state.masterTimeline.duration();
   }
 
+  function getActiveSceneIndexFromTimeline() {
+    if (!state.masterTimeline || state.scenes.length === 0) {
+      return 0;
+    }
+
+    const labels = state.masterTimeline.labels;
+    const currentTime = state.masterTimeline.time();
+    let resolvedIndex = 0;
+
+    for (let index = 0; index < state.scenes.length; index += 1) {
+      const scene = state.scenes[index];
+      const enterTime = labels[scene.labels.enter];
+
+      if (typeof enterTime !== "number") {
+        continue;
+      }
+
+      if (currentTime < enterTime) {
+        break;
+      }
+
+      const nextScene = state.scenes[index + 1];
+      if (!nextScene) {
+        resolvedIndex = index;
+        break;
+      }
+
+      const nextEnterTime = labels[nextScene.labels.enter];
+      if (typeof nextEnterTime !== "number" || currentTime < nextEnterTime) {
+        resolvedIndex = index;
+        break;
+      }
+
+      resolvedIndex = index + 1;
+    }
+
+    return Math.min(state.scenes.length - 1, Math.max(0, resolvedIndex));
+  }
+
   function buildMasterTimeline() {
     destroyTimeline();
     cacheDom();
+    applyRuntimeProfile();
 
     if (!state.root || state.sections.length === 0) {
       return;
@@ -1601,12 +1962,8 @@ export function initScrollExperience() {
         invalidateOnRefresh: true,
         fastScrollEnd: true,
         anticipatePin: 1,
-        onUpdate: (self) => {
-          const nextIndex = Math.min(
-            state.scenes.length - 1,
-            Math.floor(self.progress * state.scenes.length)
-          );
-          setActiveSection(nextIndex);
+        onUpdate: () => {
+          setActiveSection(getActiveSceneIndexFromTimeline());
         },
       },
     });
@@ -1646,7 +2003,7 @@ export function initScrollExperience() {
 
     window.scrollTo({
       top: scrollTarget,
-      behavior: "smooth",
+      behavior: state.runtimeProfile && state.runtimeProfile.useInstantNavScroll ? "auto" : "smooth",
     });
   }
 
@@ -1654,6 +2011,7 @@ export function initScrollExperience() {
     state.navList = document.querySelector(".nav-list");
     if (state.navList) {
       state.navList.addEventListener("click", handleNavClick);
+      syncNavActiveItem(state.activeSectionIndex);
     }
 
     state.onResize = () => {
@@ -1696,6 +2054,7 @@ export function initScrollExperience() {
     gsap.registerPlugin(ScrollTrigger);
     ScrollTrigger.config({
       ignoreMobileResize: true,
+      limitCallbacks: true,
     });
 
     buildMasterTimeline();

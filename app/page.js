@@ -18,36 +18,76 @@ const NAV_ITEMS = [
 ];
 
 const SECTIONS = [
-  { id: "hero", title: "Hero", level: 1, placeholder: "[Placeholder: Hero scene content]" },
-  { id: "problems", title: "Problems", level: 2, placeholder: "[Placeholder: Problems content]" },
+  {
+    id: "hero",
+    title: "Bosch Service. Rebuilt by AI.",
+    level: 1,
+    placeholder:
+      "From workshop chaos to fully coordinated service flow. One scroll shows the full transformation.",
+  },
+  {
+    id: "problems",
+    title: "What breaks growth today",
+    level: 2,
+    placeholder:
+      "Phone overload, manual triage, and delayed updates create 2-4 hour response gaps and lost jobs.",
+  },
   {
     id: "ai-activation",
-    title: "AI Activation",
+    title: "AI activates in one day",
     level: 2,
-    placeholder: "[Placeholder: AI activation content]",
+    placeholder:
+      "Connect forms, WhatsApp, and CRM in one orchestration layer. First automated flows launch in under 24h.",
   },
-  { id: "intake", title: "Intake", level: 2, placeholder: "[Placeholder: Intake content]" },
-  { id: "planning", title: "Planning", level: 2, placeholder: "[Placeholder: Planning content]" },
-  { id: "parts", title: "Parts", level: 2, placeholder: "[Placeholder: Parts content]" },
+  {
+    id: "intake",
+    title: "Intake without bottlenecks",
+    level: 2,
+    placeholder:
+      "Every request is captured, classified, and enriched automatically. Intake admin time drops by up to 60%.",
+  },
+  {
+    id: "planning",
+    title: "Planning that fills the day",
+    level: 2,
+    placeholder:
+      "Jobs are prioritized by urgency, parts readiness, and team capacity. Empty slots can be reduced by up to 35%.",
+  },
+  {
+    id: "parts",
+    title: "Parts + pricing, prepared early",
+    level: 2,
+    placeholder:
+      "Required parts and quote ranges are prepared before contact. Approval cycles can be shortened by up to 40%.",
+  },
   {
     id: "communication",
-    title: "Communication",
+    title: "Status communication on autopilot",
     level: 2,
-    placeholder: "[Placeholder: Communication content]",
+    placeholder:
+      "Customers receive instant confirmations, ETA updates, and pickup notifications. Inbound status calls can drop by up to 50%.",
   },
   {
     id: "command-center",
-    title: "Command Center",
+    title: "Command Center view",
     level: 2,
-    placeholder: "[Placeholder: Command center content]",
+    placeholder:
+      "One dashboard tracks queue health, technician load, pending approvals, and SLA risk in real time.",
   },
   {
     id: "transformation",
-    title: "Transformation",
+    title: "From reactive to predictable",
     level: 2,
-    placeholder: "[Placeholder: Transformation content]",
+    placeholder:
+      "The workshop runs with fewer delays, faster customer response, and clear operational visibility every hour.",
   },
-  { id: "cta", title: "CTA", level: 2, placeholder: "[Placeholder: Final call-to-action content]" },
+  {
+    id: "cta",
+    title: "Launch the Bosch AI flow",
+    level: 2,
+    placeholder:
+      "Book a 30-minute automation blueprint and receive a 14-day rollout plan for your service operation.",
+  },
 ];
 
 export default function HomePage() {
