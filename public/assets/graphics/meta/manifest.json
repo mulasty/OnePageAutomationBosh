@@ -157,6 +157,30 @@
       "mime": "image/svg+xml",
       "sha256": "346ef9327c454e1974d9a2e058ab3b89fca116da3602c8d5e5cf39df19b070fa",
       "status": "integrated"
+    },
+    {
+      "assetId": "scene-parts__layer-base__v01",
+      "sceneId": "parts",
+      "layerType": "base",
+      "path": "/assets/graphics/base/scene-parts__layer-base__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1150,
+      "mime": "image/svg+xml",
+      "sha256": "736bcdf5bf0b5d26146cbfa29fe9844db4eabb4174245e436f76624b21415c5f",
+      "status": "integrated"
+    },
+    {
+      "assetId": "scene-parts__layer-overlay__v01",
+      "sceneId": "parts",
+      "layerType": "overlay",
+      "path": "/assets/graphics/overlay/scene-parts__layer-overlay__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 588,
+      "mime": "image/svg+xml",
+      "sha256": "8e281153a97e57583db4e9aefdc2b9830b1a062d5bd89bbfe043cc8fe98dfaf5",
+      "status": "integrated"
     }
   ]
 }

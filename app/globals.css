@@ -483,11 +483,13 @@ body {
       rgb(63 157 255 / calc(0.02 + var(--ops-scan) * 0.1)),
       transparent 38%
     ),
+    url("/assets/graphics/base/scene-parts__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #12161f 0%, #0a1119 100%);
 }
 
 #parts::before {
   background:
+    url("/assets/graphics/overlay/scene-parts__layer-overlay__v01.svg") center / cover no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.005 + var(--ops-scan) * 0.04)) 0%,

@@ -53,6 +53,12 @@
 
 ### planning
 - Commit: feat(graphics): integrate planning assets
-- Preview URL: pending
+- Preview URL: https://onepageautomationbosh-4m8ai6c3k-mula-group-s-projects.vercel.app
 - Build: pass
 - Notes: structured planning base with soft grid overlay.
+
+### parts
+- Commit: feat(graphics): integrate parts assets
+- Preview URL: pending
+- Build: pass
+- Notes: operations base with routing overlay channels for parts readiness.

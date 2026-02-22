@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="260" y1="120" x2="2290" y2="1360" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#13202d"/>
+      <stop offset="0.58" stop-color="#0f1a25"/>
+      <stop offset="1" stop-color="#0b1219"/>
+    </linearGradient>
+    <radialGradient id="accent" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1940 260) rotate(-8) scale(920 620)">
+      <stop stop-color="#2f567a" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#2f567a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="2560" height="1440" fill="url(#bg)"/>
+  <rect width="2560" height="1440" fill="url(#accent)"/>
+  <g opacity="0.24" stroke="#8bb8df" stroke-width="2">
+    <rect x="260" y="260" width="980" height="350" rx="14"/>
+    <rect x="1320" y="260" width="980" height="350" rx="14"/>
+    <rect x="260" y="680" width="640" height="460" rx="14"/>
+    <rect x="960" y="680" width="640" height="460" rx="14"/>
+    <rect x="1660" y="680" width="640" height="460" rx="14"/>
+  </g>
+</svg>
