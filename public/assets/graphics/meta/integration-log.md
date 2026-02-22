@@ -29,6 +29,12 @@
 
 ### transformation
 - Commit: feat(graphics): integrate transformation assets
-- Preview URL: pending
+- Preview URL: https://onepageautomationbosh-ns5o7l7m3-mula-group-s-projects.vercel.app
 - Build: pass
 - Notes: matched before/after pair integrated with controlled overlay opacity.
+
+### problems
+- Commit: feat(graphics): integrate problems assets
+- Preview URL: pending
+- Build: pass
+- Notes: darker variation base integrated while preserving text contrast.

@@ -301,6 +301,11 @@ body {
   --problems-darkness: 1;
   --problems-accent: 0.65;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.16 + var(--problems-darkness) * 0.18)) 0%,
+      rgb(0 0 0 / calc(0.22 + var(--problems-darkness) * 0.2)) 100%
+    ),
     radial-gradient(
       circle at 84% 82%,
       rgb(226 0 21 / calc(0.08 + var(--problems-accent) * 0.1)),
@@ -311,6 +316,7 @@ body {
       rgb(63 157 255 / calc(0.02 + var(--problems-accent) * 0.06)),
       transparent 36%
     ),
+    url("/assets/graphics/base/scene-problems__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(170deg, #10141b 0%, #090d13 100%);
 }
 

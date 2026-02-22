@@ -73,6 +73,18 @@
       "mime": "image/svg+xml",
       "sha256": "1d4af4c9e4f3b8fc3f1c5d5a48d18d2548e33d1da89274d338eb3c5626c55e72",
       "status": "integrated"
+    },
+    {
+      "assetId": "scene-problems__layer-base__v01",
+      "sceneId": "problems",
+      "layerType": "base",
+      "path": "/assets/graphics/base/scene-problems__layer-base__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1354,
+      "mime": "image/svg+xml",
+      "sha256": "722a72a2b7ff88658e51135acd25dd174e2f3de56a461307997d586798246c9b",
+      "status": "integrated"
     }
   ]
 }
