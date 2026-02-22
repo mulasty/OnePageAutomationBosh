@@ -334,6 +334,11 @@ body {
   --activation-darkness: 0.98;
   --activation-scan: 0.05;
   background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.08 + var(--activation-darkness) * 0.14)) 0%,
+      rgb(0 0 0 / calc(0.14 + var(--activation-darkness) * 0.16)) 100%
+    ),
     radial-gradient(
       circle at 82% 18%,
       rgb(63 157 255 / calc(0.08 + var(--activation-glow) * 0.2)),
@@ -344,11 +349,13 @@ body {
       rgb(63 157 255 / calc(0.03 + var(--activation-glow) * 0.12)),
       transparent 42%
     ),
+    url("/assets/graphics/base/scene-ai-activation__layer-base__v01.svg") center / cover no-repeat,
     linear-gradient(165deg, #101824 0%, #08111c 100%);
 }
 
 #ai-activation::before {
   background:
+    url("/assets/graphics/hud/scene-ai-activation__layer-hud__v01.svg") center / cover no-repeat,
     linear-gradient(
       180deg,
       rgb(63 157 255 / calc(0.01 + var(--activation-scan) * 0.06)) 0%,

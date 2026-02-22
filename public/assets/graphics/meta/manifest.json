@@ -85,6 +85,30 @@
       "mime": "image/svg+xml",
       "sha256": "722a72a2b7ff88658e51135acd25dd174e2f3de56a461307997d586798246c9b",
       "status": "integrated"
+    },
+    {
+      "assetId": "scene-ai-activation__layer-base__v01",
+      "sceneId": "ai-activation",
+      "layerType": "base",
+      "path": "/assets/graphics/base/scene-ai-activation__layer-base__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1353,
+      "mime": "image/svg+xml",
+      "sha256": "3cec378879ced6353f6bb70832e2120332156d23f96be707917d6519531d53b0",
+      "status": "integrated"
+    },
+    {
+      "assetId": "scene-ai-activation__layer-hud__v01",
+      "sceneId": "ai-activation",
+      "layerType": "hud",
+      "path": "/assets/graphics/hud/scene-ai-activation__layer-hud__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 651,
+      "mime": "image/svg+xml",
+      "sha256": "0882a6547547ef72e30b25ff5aeebada45ff8861abbd816cf64669355503877b",
+      "status": "integrated"
     }
   ]
 }

@@ -35,6 +35,12 @@
 
 ### problems
 - Commit: feat(graphics): integrate problems assets
-- Preview URL: pending
+- Preview URL: https://onepageautomationbosh-mcckevjv9-mula-group-s-projects.vercel.app
 - Build: pass
 - Notes: darker variation base integrated while preserving text contrast.
+
+### ai-activation
+- Commit: feat(graphics): integrate ai-activation assets
+- Preview URL: pending
+- Build: pass
+- Notes: base plus subtle HUD scan integrated for activation moment.
