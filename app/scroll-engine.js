@@ -1,6 +1,10 @@
-"use strict";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-(() => {
+export function initScrollExperience() {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return () => {};
+  }
   const CONFIG = {
     rootSelector: "#scroll-root",
     sectionSelector: ".panel",
@@ -37,10 +41,12 @@
     masterTimeline: null,
     activeSectionIndex: -1,
     resizeTimer: null,
+    navList: null,
+    onResize: null,
   };
 
   function hasEngineDependencies() {
-    return typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
+    return typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
   }
 
   function cacheDom() {
@@ -336,6 +342,384 @@
     };
   }
 
+  function ensureIntakeFlowElements(content) {
+    const existingFlow = content.querySelector('[data-intake-flow="true"]');
+    if (existingFlow) {
+      return {
+        flow: existingFlow,
+        request: existingFlow.querySelector('[data-intake-step="request"]'),
+        processing: existingFlow.querySelector('[data-intake-step="processing"]'),
+        card: existingFlow.querySelector('[data-intake-step="card"]'),
+      };
+    }
+
+    const flow = document.createElement("div");
+    flow.className = "intake-flow";
+    flow.dataset.intakeFlow = "true";
+
+    const request = document.createElement("div");
+    request.className = "intake-step intake-step--request";
+    request.dataset.intakeStep = "request";
+    request.textContent = "[Placeholder: Incoming service request]";
+
+    const processing = document.createElement("div");
+    processing.className = "intake-step intake-step--processing";
+    processing.dataset.intakeStep = "processing";
+    processing.textContent = "[Placeholder: AI processing intake data]";
+
+    const card = document.createElement("div");
+    card.className = "intake-step intake-step--card";
+    card.dataset.intakeStep = "card";
+    card.textContent = "[Placeholder: Service card generated]";
+
+    flow.append(request, processing, card);
+    content.appendChild(flow);
+
+    return {
+      flow,
+      request,
+      processing,
+      card,
+    };
+  }
+
+  function createIntakeRevealConfig(content) {
+    const heading = content.querySelector("h1, h2");
+    const subtitle = content.querySelector("p");
+    const intakeFlow = ensureIntakeFlowElements(content);
+    const items = [heading, subtitle, intakeFlow.request, intakeFlow.processing, intakeFlow.card].filter(
+      Boolean
+    );
+
+    return {
+      items,
+      heading,
+      subtitle,
+      flow: intakeFlow,
+      atmosphereFrom: {
+        "--intake-glow": 0.24,
+        "--intake-darkness": 0.96,
+        "--intake-focus": 0.15,
+      },
+      atmosphereTo: {
+        "--intake-glow": 0.8,
+        "--intake-darkness": 0.66,
+        "--intake-focus": 0.72,
+        duration: CONFIG.phaseDuration.enter,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      atmosphereActiveTo: {
+        "--intake-glow": 0.95,
+        "--intake-darkness": 0.56,
+        "--intake-focus": 1,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      },
+      atmosphereExitTo: {
+        "--intake-glow": 0.72,
+        "--intake-darkness": 0.62,
+        "--intake-focus": 0.86,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      headingFrom: {
+        autoAlpha: 0,
+        y: 18,
+      },
+      headingTo: {
+        autoAlpha: 1,
+        y: 0,
+        duration: CONFIG.phaseDuration.enter * 0.56,
+        ease: "power2.out",
+        overwrite: "auto",
+      },
+      subtitleFrom: {
+        autoAlpha: 0,
+        y: 16,
+      },
+      subtitleTo: {
+        autoAlpha: 1,
+        y: 0,
+        duration: CONFIG.phaseDuration.enter * 0.48,
+        ease: "power2.out",
+        overwrite: "auto",
+      },
+      stepFromFactory: (index) => ({
+        autoAlpha: 0,
+        y: 14 + index * 8,
+        scale: 0.99,
+      }),
+      stepToFactory: () => ({
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: CONFIG.phaseDuration.enter * 0.45,
+        ease: "power2.out",
+        overwrite: "auto",
+      }),
+      stepActiveToFactory: () => ({
+        autoAlpha: 1,
+        y: -2,
+        scale: 1,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      }),
+      stepExitToFactory: (index) => ({
+        autoAlpha: index < 2 ? 0.84 : 0.9,
+        y: -4,
+        scale: 1,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      }),
+      stepStagger: 0.09,
+    };
+  }
+
+  function ensurePlanningFlowElements(content) {
+    const existingFlow = content.querySelector('[data-planning-flow="true"]');
+    if (existingFlow) {
+      return {
+        flow: existingFlow,
+        sourceCard: existingFlow.querySelector('[data-planning-part="source-card"]'),
+        pieces: Array.from(existingFlow.querySelectorAll('[data-planning-part="piece"]')),
+        timeline: existingFlow.querySelector('[data-planning-part="timeline"]'),
+        timelineSlots: Array.from(existingFlow.querySelectorAll('[data-planning-part="timeline-slot"]')),
+      };
+    }
+
+    const flow = document.createElement("div");
+    flow.className = "planning-flow";
+    flow.dataset.planningFlow = "true";
+
+    const sourceCard = document.createElement("div");
+    sourceCard.className = "planning-source-card";
+    sourceCard.dataset.planningPart = "source-card";
+    sourceCard.textContent = "[Placeholder: Service card moved from intake]";
+
+    const board = document.createElement("div");
+    board.className = "planning-board";
+
+    const pieceLabels = [
+      "[Placeholder: Job block A]",
+      "[Placeholder: Job block B]",
+      "[Placeholder: Job block C]",
+    ];
+
+    const pieces = pieceLabels.map((label) => {
+      const piece = document.createElement("div");
+      piece.className = "planning-piece";
+      piece.dataset.planningPart = "piece";
+      piece.textContent = label;
+      return piece;
+    });
+
+    board.append(...pieces);
+
+    const timeline = document.createElement("div");
+    timeline.className = "planning-timeline";
+    timeline.dataset.planningPart = "timeline";
+
+    const slotLabels = [
+      "[Placeholder: Slot 1 - Priority job]",
+      "[Placeholder: Slot 2 - Parts preparation]",
+      "[Placeholder: Slot 3 - Delivery window]",
+    ];
+
+    const timelineSlots = slotLabels.map((label) => {
+      const slot = document.createElement("div");
+      slot.className = "planning-slot";
+      slot.dataset.planningPart = "timeline-slot";
+      slot.textContent = label;
+      return slot;
+    });
+
+    timeline.append(...timelineSlots);
+    flow.append(sourceCard, board, timeline);
+    content.appendChild(flow);
+
+    return {
+      flow,
+      sourceCard,
+      pieces,
+      timeline,
+      timelineSlots,
+    };
+  }
+
+  function createPlanningRevealConfig(content) {
+    const heading = content.querySelector("h1, h2");
+    const subtitle = content.querySelector("p");
+    const planningFlow = ensurePlanningFlowElements(content);
+    const pieces = planningFlow.pieces || [];
+    const timelineSlots = planningFlow.timelineSlots || [];
+    const items = [heading, subtitle, planningFlow.sourceCard, ...pieces, ...timelineSlots].filter(Boolean);
+
+    const pieceOffsets = [
+      { x: -32, y: 20, rotation: -4 },
+      { x: 26, y: 18, rotation: 3 },
+      { x: 18, y: -22, rotation: 5 },
+    ];
+
+    return {
+      items,
+      heading,
+      subtitle,
+      flow: planningFlow,
+      atmosphereFrom: {
+        "--planning-grid": 0.12,
+        "--planning-focus": 0.14,
+        "--planning-darkness": 0.96,
+      },
+      atmosphereTo: {
+        "--planning-grid": 0.72,
+        "--planning-focus": 0.7,
+        "--planning-darkness": 0.68,
+        duration: CONFIG.phaseDuration.enter,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      atmosphereActiveTo: {
+        "--planning-grid": 1,
+        "--planning-focus": 1,
+        "--planning-darkness": 0.58,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      },
+      atmosphereExitTo: {
+        "--planning-grid": 0.82,
+        "--planning-focus": 0.84,
+        "--planning-darkness": 0.64,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      headingFrom: {
+        autoAlpha: 0,
+        y: 16,
+      },
+      headingTo: {
+        autoAlpha: 1,
+        y: 0,
+        duration: CONFIG.phaseDuration.enter * 0.54,
+        ease: "power2.out",
+        overwrite: "auto",
+      },
+      subtitleFrom: {
+        autoAlpha: 0,
+        y: 14,
+      },
+      subtitleTo: {
+        autoAlpha: 1,
+        y: 0,
+        duration: CONFIG.phaseDuration.enter * 0.48,
+        ease: "power2.out",
+        overwrite: "auto",
+      },
+      sourceCardFrom: {
+        autoAlpha: 0,
+        y: 20,
+        scale: 0.97,
+      },
+      sourceCardTo: {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: CONFIG.phaseDuration.enter * 0.5,
+        ease: "power2.out",
+        overwrite: "auto",
+      },
+      sourceCardActiveTo: {
+        autoAlpha: 0.92,
+        y: -7,
+        scale: 0.985,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      },
+      sourceCardExitTo: {
+        autoAlpha: 0.86,
+        y: -10,
+        scale: 0.98,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      pieceFromFactory: (index) => ({
+        autoAlpha: 0,
+        x: pieceOffsets[index % pieceOffsets.length].x,
+        y: pieceOffsets[index % pieceOffsets.length].y,
+        rotation: pieceOffsets[index % pieceOffsets.length].rotation,
+        scale: 0.98,
+      }),
+      pieceToFactory: () => ({
+        autoAlpha: 1,
+        x: 0,
+        y: 0,
+        rotation: 0,
+        scale: 1,
+        duration: CONFIG.phaseDuration.enter * 0.44,
+        ease: "power2.out",
+        overwrite: "auto",
+      }),
+      pieceActiveToFactory: (index) => ({
+        autoAlpha: 1,
+        x: index - 1,
+        y: -2,
+        rotation: 0,
+        scale: 1,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      }),
+      pieceExitToFactory: () => ({
+        autoAlpha: 0.9,
+        y: -4,
+        rotation: 0,
+        scale: 1,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      }),
+      timelineSlotFromFactory: (index) => ({
+        autoAlpha: 0,
+        x: 20 + index * 4,
+        y: 8,
+      }),
+      timelineSlotToFactory: () => ({
+        autoAlpha: 1,
+        x: 0,
+        y: 0,
+        duration: CONFIG.phaseDuration.enter * 0.42,
+        ease: "power2.out",
+        overwrite: "auto",
+      }),
+      timelineSlotActiveToFactory: () => ({
+        autoAlpha: 1,
+        x: 0,
+        y: -1,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      }),
+      timelineSlotExitToFactory: (index) => ({
+        autoAlpha: index === timelineSlots.length - 1 ? 0.94 : 0.86,
+        x: 0,
+        y: -3,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      }),
+      pieceStagger: 0.07,
+      timelineStagger: 0.06,
+    };
+  }
+
   function createSceneModule(section, index) {
     const sceneId = section.id || `scene-${index + 1}`;
     const content = section.querySelector(".panel-content") || section;
@@ -343,9 +727,13 @@
     const isHero = sceneId === "hero";
     const isProblems = sceneId === "problems";
     const isAiActivation = sceneId === "ai-activation";
+    const isIntake = sceneId === "intake";
+    const isPlanning = sceneId === "planning";
     const heroReveal = isHero ? createHeroRevealConfig(content) : null;
     const problemsReveal = isProblems ? createProblemsRevealConfig(content) : null;
     const aiActivationReveal = isAiActivation ? createAiActivationRevealConfig(content) : null;
+    const intakeReveal = isIntake ? createIntakeRevealConfig(content) : null;
+    const planningReveal = isPlanning ? createPlanningRevealConfig(content) : null;
 
     section.setAttribute("data-scene-id", sceneId);
     section.setAttribute("data-scene-index", String(index));
@@ -371,13 +759,20 @@
       problemsReveal,
       isAiActivation,
       aiActivationReveal,
+      isIntake,
+      intakeReveal,
+      isPlanning,
+      planningReveal,
       layers,
       motion: {
-        target: isHero || isProblems || isAiActivation ? content : layers.foreground.target || content,
+        target:
+          isHero || isProblems || isAiActivation || isIntake || isPlanning
+            ? content
+            : layers.foreground.target || content,
         enterFrom: {
-          autoAlpha: isHero || isProblems || isAiActivation ? 1 : 0.35,
+          autoAlpha: isHero || isProblems || isAiActivation || isIntake || isPlanning ? 1 : 0.35,
           yPercent: 0,
-          scale: isHero || isProblems || isAiActivation ? 1 : 0.992,
+          scale: isHero || isProblems || isAiActivation || isIntake || isPlanning ? 1 : 0.992,
         },
         enterTo: {
           autoAlpha: 1,
@@ -476,13 +871,13 @@
   function prepareSceneBaseStates() {
     state.scenes.forEach((scene, index) => {
       if (scene.isHero && scene.heroReveal) {
-        window.gsap.set(scene.element, {
+        gsap.set(scene.element, {
           "--hero-light": 0,
           "--hero-darkness": 1,
         });
 
         if (scene.heroReveal.heading) {
-          window.gsap.set(scene.heroReveal.heading, {
+          gsap.set(scene.heroReveal.heading, {
             ...scene.heroReveal.headingFrom,
             transformOrigin: "50% 50%",
             force3D: true,
@@ -490,7 +885,7 @@
         }
 
         if (scene.heroReveal.subtitle) {
-          window.gsap.set(scene.heroReveal.subtitle, {
+          gsap.set(scene.heroReveal.subtitle, {
             ...scene.heroReveal.subtitleFrom,
             transformOrigin: "50% 50%",
             force3D: true,
@@ -498,7 +893,7 @@
         }
 
         if (scene.heroReveal.cta) {
-          window.gsap.set(scene.heroReveal.cta, {
+          gsap.set(scene.heroReveal.cta, {
             ...scene.heroReveal.ctaFrom,
             transformOrigin: "50% 50%",
             force3D: true,
@@ -507,13 +902,13 @@
       }
 
       if (scene.isProblems && scene.problemsReveal) {
-        window.gsap.set(scene.element, {
+        gsap.set(scene.element, {
           "--problems-darkness": 1,
           "--problems-accent": 0.65,
         });
 
         scene.problemsReveal.items.forEach((item, index) => {
-          window.gsap.set(item, {
+          gsap.set(item, {
             ...scene.problemsReveal.itemFromFactory(index),
             transformOrigin: "50% 50%",
             force3D: true,
@@ -522,14 +917,14 @@
       }
 
       if (scene.isAiActivation && scene.aiActivationReveal) {
-        window.gsap.set(scene.element, {
+        gsap.set(scene.element, {
           "--activation-glow": 0.2,
           "--activation-darkness": 0.98,
           "--activation-scan": 0.05,
         });
 
         scene.aiActivationReveal.items.forEach((item, index) => {
-          window.gsap.set(item, {
+          gsap.set(item, {
             ...scene.aiActivationReveal.itemFromFactory(index),
             transformOrigin: "50% 50%",
             force3D: true,
@@ -537,7 +932,95 @@
         });
       }
 
-      window.gsap.set(scene.motion.target, {
+      if (scene.isIntake && scene.intakeReveal) {
+        gsap.set(scene.element, {
+          "--intake-glow": 0.24,
+          "--intake-darkness": 0.96,
+          "--intake-focus": 0.15,
+        });
+
+        if (scene.intakeReveal.heading) {
+          gsap.set(scene.intakeReveal.heading, {
+            ...scene.intakeReveal.headingFrom,
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        }
+
+        if (scene.intakeReveal.subtitle) {
+          gsap.set(scene.intakeReveal.subtitle, {
+            ...scene.intakeReveal.subtitleFrom,
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        }
+
+        const intakeSteps = [
+          scene.intakeReveal.flow.request,
+          scene.intakeReveal.flow.processing,
+          scene.intakeReveal.flow.card,
+        ].filter(Boolean);
+
+        intakeSteps.forEach((step, index) => {
+          gsap.set(step, {
+            ...scene.intakeReveal.stepFromFactory(index),
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        });
+      }
+
+      if (scene.isPlanning && scene.planningReveal) {
+        gsap.set(scene.element, {
+          "--planning-grid": 0.12,
+          "--planning-focus": 0.14,
+          "--planning-darkness": 0.96,
+        });
+
+        if (scene.planningReveal.heading) {
+          gsap.set(scene.planningReveal.heading, {
+            ...scene.planningReveal.headingFrom,
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        }
+
+        if (scene.planningReveal.subtitle) {
+          gsap.set(scene.planningReveal.subtitle, {
+            ...scene.planningReveal.subtitleFrom,
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        }
+
+        if (scene.planningReveal.flow.sourceCard) {
+          gsap.set(scene.planningReveal.flow.sourceCard, {
+            ...scene.planningReveal.sourceCardFrom,
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        }
+
+        const planningPieces = scene.planningReveal.flow.pieces || [];
+        planningPieces.forEach((piece, index) => {
+          gsap.set(piece, {
+            ...scene.planningReveal.pieceFromFactory(index),
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        });
+
+        const planningTimelineSlots = scene.planningReveal.flow.timelineSlots || [];
+        planningTimelineSlots.forEach((slot, index) => {
+          gsap.set(slot, {
+            ...scene.planningReveal.timelineSlotFromFactory(index),
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        });
+      }
+
+      gsap.set(scene.motion.target, {
         autoAlpha: index === 0 ? 1 : scene.motion.enterFrom.autoAlpha,
         yPercent: index === 0 ? 0 : scene.motion.enterFrom.yPercent,
         scale: index === 0 ? 1 : scene.motion.enterFrom.scale,
@@ -551,7 +1034,7 @@
           return;
         }
 
-        window.gsap.set(layer.target, {
+        gsap.set(layer.target, {
           transformOrigin: "50% 50%",
           force3D: true,
         });
@@ -585,6 +1068,14 @@
       addAiActivationSceneSlot(masterTimeline, scene, isLastScene);
       return;
     }
+    if (scene.isIntake && scene.intakeReveal) {
+      addIntakeSceneSlot(masterTimeline, scene, isLastScene);
+      return;
+    }
+    if (scene.isPlanning && scene.planningReveal) {
+      addPlanningSceneSlot(masterTimeline, scene, isLastScene);
+      return;
+    }
 
     masterTimeline.addLabel(scene.labels.enter);
     masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
@@ -610,6 +1101,192 @@
     addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.exitTo, "<");
     addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.exitTo, "<");
     addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.exitTo, "<");
+
+    addSceneShift(masterTimeline, scene.index, isLastScene);
+  }
+
+  function addPlanningSceneSlot(masterTimeline, scene, isLastScene) {
+    const planning = scene.planningReveal;
+    const planningPieces = planning.flow.pieces || [];
+    const planningTimelineSlots = planning.flow.timelineSlots || [];
+
+    masterTimeline.addLabel(scene.labels.enter);
+    masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
+    masterTimeline.fromTo(scene.element, planning.atmosphereFrom, planning.atmosphereTo);
+
+    addDepthTween(
+      masterTimeline,
+      scene.layers.background.target,
+      scene.depth.background.enterFrom,
+      scene.depth.background.enterTo,
+      "<"
+    );
+    addDepthTween(
+      masterTimeline,
+      scene.layers.midground.target,
+      scene.depth.midground.enterFrom,
+      scene.depth.midground.enterTo,
+      "<"
+    );
+    addDepthTween(
+      masterTimeline,
+      scene.layers.foreground.target,
+      scene.depth.foreground.enterFrom,
+      scene.depth.foreground.enterTo,
+      "<"
+    );
+
+    addElementTween(masterTimeline, planning.heading, planning.headingFrom, planning.headingTo, "<+0.04");
+    addElementTween(masterTimeline, planning.subtitle, planning.subtitleFrom, planning.subtitleTo, "<+0.07");
+    addElementTween(
+      masterTimeline,
+      planning.flow.sourceCard,
+      planning.sourceCardFrom,
+      planning.sourceCardTo,
+      "<+0.08"
+    );
+
+    planningPieces.forEach((piece, index) => {
+      addElementTween(
+        masterTimeline,
+        piece,
+        planning.pieceFromFactory(index),
+        planning.pieceToFactory(),
+        index === 0 ? "<+0.09" : `<+${planning.pieceStagger}`
+      );
+    });
+
+    planningTimelineSlots.forEach((slot, index) => {
+      addElementTween(
+        masterTimeline,
+        slot,
+        planning.timelineSlotFromFactory(index),
+        planning.timelineSlotToFactory(),
+        index === 0 ? "<+0.08" : `<+${planning.timelineStagger}`
+      );
+    });
+
+    masterTimeline.addLabel(scene.labels.active);
+    masterTimeline.call(() => runScenePhase(scene, "active"), null, ">");
+    masterTimeline.to(scene.element, planning.atmosphereActiveTo);
+
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.activeTo, "<");
+
+    addElementTween(masterTimeline, planning.flow.sourceCard, null, planning.sourceCardActiveTo, "<");
+
+    planningPieces.forEach((piece, index) => {
+      addElementTween(masterTimeline, piece, null, planning.pieceActiveToFactory(index), "<");
+    });
+
+    planningTimelineSlots.forEach((slot, index) => {
+      addElementTween(masterTimeline, slot, null, planning.timelineSlotActiveToFactory(index), "<");
+    });
+
+    masterTimeline.addLabel(scene.labels.exit);
+    masterTimeline.call(() => runScenePhase(scene, "exit"), null, ">");
+    masterTimeline.to(scene.element, planning.atmosphereExitTo);
+
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.exitTo, "<");
+
+    addElementTween(masterTimeline, planning.flow.sourceCard, null, planning.sourceCardExitTo, "<");
+
+    planningPieces.forEach((piece) => {
+      addElementTween(masterTimeline, piece, null, planning.pieceExitToFactory(), "<");
+    });
+
+    planningTimelineSlots.forEach((slot, index) => {
+      addElementTween(masterTimeline, slot, null, planning.timelineSlotExitToFactory(index), "<");
+    });
+
+    addSceneShift(masterTimeline, scene.index, isLastScene);
+  }
+
+  function addIntakeSceneSlot(masterTimeline, scene, isLastScene) {
+    const intake = scene.intakeReveal;
+    const intakeSteps = [intake.flow.request, intake.flow.processing, intake.flow.card].filter(Boolean);
+
+    masterTimeline.addLabel(scene.labels.enter);
+    masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
+    masterTimeline.fromTo(scene.element, intake.atmosphereFrom, intake.atmosphereTo);
+
+    addDepthTween(
+      masterTimeline,
+      scene.layers.background.target,
+      scene.depth.background.enterFrom,
+      scene.depth.background.enterTo,
+      "<"
+    );
+    addDepthTween(
+      masterTimeline,
+      scene.layers.midground.target,
+      scene.depth.midground.enterFrom,
+      scene.depth.midground.enterTo,
+      "<"
+    );
+    addDepthTween(
+      masterTimeline,
+      scene.layers.foreground.target,
+      scene.depth.foreground.enterFrom,
+      scene.depth.foreground.enterTo,
+      "<"
+    );
+
+    addElementTween(masterTimeline, intake.heading, intake.headingFrom, intake.headingTo, "<+0.04");
+    addElementTween(masterTimeline, intake.subtitle, intake.subtitleFrom, intake.subtitleTo, "<+0.07");
+
+    intakeSteps.forEach((step, index) => {
+      addElementTween(
+        masterTimeline,
+        step,
+        intake.stepFromFactory(index),
+        intake.stepToFactory(),
+        index === 0 ? "<+0.08" : `<+${intake.stepStagger}`
+      );
+    });
+
+    masterTimeline.addLabel(scene.labels.active);
+    masterTimeline.call(() => runScenePhase(scene, "active"), null, ">");
+    masterTimeline.to(scene.element, intake.atmosphereActiveTo);
+
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.activeTo, "<");
+
+    addElementTween(masterTimeline, intake.heading, null, {
+      autoAlpha: 1,
+      y: -2,
+      duration: CONFIG.phaseDuration.active,
+      ease: "none",
+      overwrite: "auto",
+    }, "<");
+
+    addElementTween(masterTimeline, intake.subtitle, null, {
+      autoAlpha: 1,
+      y: -1.5,
+      duration: CONFIG.phaseDuration.active,
+      ease: "none",
+      overwrite: "auto",
+    }, "<");
+
+    intakeSteps.forEach((step) => {
+      addElementTween(masterTimeline, step, null, intake.stepActiveToFactory(), "<");
+    });
+
+    masterTimeline.addLabel(scene.labels.exit);
+    masterTimeline.call(() => runScenePhase(scene, "exit"), null, ">");
+    masterTimeline.to(scene.element, intake.atmosphereExitTo);
+
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.exitTo, "<");
+
+    intakeSteps.forEach((step, index) => {
+      addElementTween(masterTimeline, step, null, intake.stepExitToFactory(index), "<");
+    });
 
     addSceneShift(masterTimeline, scene.index, isLastScene);
   }
@@ -902,7 +1579,7 @@
     buildSceneModules();
     prepareSceneBaseStates();
 
-    window.gsap.set(state.sections, {
+    gsap.set(state.sections, {
       yPercent: 0,
       force3D: true,
     });
@@ -911,7 +1588,7 @@
       runScenePhase(state.scenes[0], "active");
     }
 
-    state.masterTimeline = window.gsap.timeline({
+    state.masterTimeline = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: {
         id: "master-scroll-timeline",
@@ -974,37 +1651,67 @@
   }
 
   function bindEvents() {
-    const navList = document.querySelector(".nav-list");
-    if (navList) {
-      navList.addEventListener("click", handleNavClick);
+    state.navList = document.querySelector(".nav-list");
+    if (state.navList) {
+      state.navList.addEventListener("click", handleNavClick);
     }
 
-    window.addEventListener("resize", () => {
+    state.onResize = () => {
       if (state.resizeTimer) {
         window.clearTimeout(state.resizeTimer);
       }
 
       state.resizeTimer = window.setTimeout(() => {
         buildMasterTimeline();
-        window.ScrollTrigger.refresh();
+        ScrollTrigger.refresh();
       }, 200);
-    });
+    };
+
+    window.addEventListener("resize", state.onResize);
+  }
+
+  function unbindEvents() {
+    if (state.navList) {
+      state.navList.removeEventListener("click", handleNavClick);
+      state.navList = null;
+    }
+
+    if (state.onResize) {
+      window.removeEventListener("resize", state.onResize);
+      state.onResize = null;
+    }
+
+    if (state.resizeTimer) {
+      window.clearTimeout(state.resizeTimer);
+      state.resizeTimer = null;
+    }
   }
 
   function init() {
     if (!hasEngineDependencies()) {
       // Fallback to native scroll if GSAP assets fail to load.
-      return;
+      return false;
     }
 
-    window.gsap.registerPlugin(window.ScrollTrigger);
-    window.ScrollTrigger.config({
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({
       ignoreMobileResize: true,
     });
 
     buildMasterTimeline();
     bindEvents();
+    return true;
   }
 
-  document.addEventListener("DOMContentLoaded", init);
-})();
+  const initialized = init();
+
+  return () => {
+    unbindEvents();
+    destroyTimeline();
+
+    if (initialized) {
+      ScrollTrigger.clearScrollMemory();
+    }
+  };
+}
+
