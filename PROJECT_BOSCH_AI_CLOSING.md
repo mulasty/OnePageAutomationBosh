@@ -164,11 +164,11 @@ Goal:
 Keep cinematic quality while increasing conversion clarity.
 
 Checklist:
-- [ ] benefit headlines stronger than feature wording
-- [ ] ROI microcopy aligned to workshop outcomes
-- [ ] trust markers visible but not noisy
-- [ ] CTA wording clear and action-first
-- [ ] emotional contrast preserved in transformation section
+- [x] benefit headlines stronger than feature wording
+- [x] ROI microcopy aligned to workshop outcomes
+- [x] trust markers visible but not noisy
+- [x] CTA wording clear and action-first
+- [x] emotional contrast preserved in transformation section
 
 ---
 

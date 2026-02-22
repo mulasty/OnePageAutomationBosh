@@ -20,73 +20,73 @@ const NAV_ITEMS = [
 const SECTIONS = [
   {
     id: "hero",
-    title: "Bosch Service. Rebuilt by AI.",
+    title: "Turn Service Chaos into Scheduled Revenue",
     level: 1,
     placeholder:
-      "From workshop chaos to fully coordinated service flow. One scroll shows the full transformation.",
+      "Bosch-ready AI captures every inquiry, triages urgency, and turns inbound demand into predictable booked jobs.",
   },
   {
     id: "problems",
-    title: "What breaks growth today",
+    title: "Leads leak before they reach your team",
     level: 2,
     placeholder:
-      "Phone overload, manual triage, and delayed updates create 2-4 hour response gaps and lost jobs.",
+      "Phone overload, manual triage, and delayed callbacks create 2-4 hour response gaps that turn high-intent drivers into lost revenue.",
   },
   {
     id: "ai-activation",
-    title: "AI activates in one day",
+    title: "Go live in 24 hours, not 8 weeks",
     level: 2,
     placeholder:
-      "Connect forms, WhatsApp, and CRM in one orchestration layer. First automated flows launch in under 24h.",
+      "Connect forms, WhatsApp, and CRM once. Automation starts classifying requests immediately and routes qualified work to advisors.",
   },
   {
     id: "intake",
-    title: "Intake without bottlenecks",
+    title: "Capture every request in under 15 seconds",
     level: 2,
     placeholder:
-      "Every request is captured, classified, and enriched automatically. Intake admin time drops by up to 60%.",
+      "Every request is captured, classified, and enriched with vehicle context automatically. Intake admin time can drop by up to 60%.",
   },
   {
     id: "planning",
-    title: "Planning that fills the day",
+    title: "Fill empty slots with margin-first planning",
     level: 2,
     placeholder:
-      "Jobs are prioritized by urgency, parts readiness, and team capacity. Empty slots can be reduced by up to 35%.",
+      "Jobs are prioritized by urgency, parts readiness, and team capacity. Idle bay time can be reduced by up to 35%.",
   },
   {
     id: "parts",
-    title: "Parts + pricing, prepared early",
+    title: "Prepare parts and pricing before first callback",
     level: 2,
     placeholder:
-      "Required parts and quote ranges are prepared before contact. Approval cycles can be shortened by up to 40%.",
+      "Required parts and quote ranges are prepared upfront. Approval loops can be shortened by up to 40% and jobs start sooner.",
   },
   {
     id: "communication",
-    title: "Status communication on autopilot",
+    title: "Cut status calls while increasing trust",
     level: 2,
     placeholder:
-      "Customers receive instant confirmations, ETA updates, and pickup notifications. Inbound status calls can drop by up to 50%.",
+      "Customers receive instant confirmations, ETA updates, and pickup notifications. Inbound 'status?' calls can drop by up to 50%.",
   },
   {
     id: "command-center",
-    title: "Command Center view",
+    title: "Control SLA risk from one command view",
     level: 2,
     placeholder:
-      "One dashboard tracks queue health, technician load, pending approvals, and SLA risk in real time.",
+      "One dashboard tracks queue health, technician load, pending approvals, and SLA risk in real time with auditable event history.",
   },
   {
     id: "transformation",
-    title: "From reactive to predictable",
+    title: "Before: reactive firefighting. After: predictable throughput.",
     level: 2,
     placeholder:
-      "The workshop runs with fewer delays, faster customer response, and clear operational visibility every hour.",
+      "Before AI: delayed callbacks and idle slots. After AI: faster response, higher utilization, and calmer execution hour by hour.",
   },
   {
     id: "cta",
-    title: "Launch the Bosch AI flow",
+    title: "Book Your 30-Minute AI Revenue Blueprint",
     level: 2,
     placeholder:
-      "Book a 30-minute automation blueprint and receive a 14-day rollout plan for your service operation.",
+      "Receive a 14-day rollout plan with projected response-time and utilization gains for your workshop. No system rebuild required.",
   },
 ];
 
