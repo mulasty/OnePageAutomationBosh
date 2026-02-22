@@ -206,12 +206,75 @@
     };
   }
 
+  function createProblemsRevealConfig(content) {
+    const heading = content.querySelector("h1, h2");
+    const subtitle = content.querySelector("p");
+    const items = [heading, subtitle].filter(Boolean);
+
+    return {
+      items,
+      toneFrom: {
+        "--problems-darkness": 1,
+        "--problems-accent": 0.65,
+      },
+      toneTo: {
+        "--problems-darkness": 0.88,
+        "--problems-accent": 0.85,
+        duration: CONFIG.phaseDuration.enter,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      toneActiveTo: {
+        "--problems-darkness": 0.8,
+        "--problems-accent": 1,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      },
+      toneExitTo: {
+        "--problems-darkness": 0.9,
+        "--problems-accent": 0.75,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      },
+      itemFromFactory: (index) => ({
+        autoAlpha: 0,
+        y: 24 + index * 12,
+      }),
+      itemToFactory: () => ({
+        autoAlpha: 1,
+        y: 0,
+        duration: CONFIG.phaseDuration.enter * 0.7,
+        ease: "power2.out",
+        overwrite: "auto",
+      }),
+      itemActiveToFactory: () => ({
+        autoAlpha: 1,
+        y: -4,
+        duration: CONFIG.phaseDuration.active,
+        ease: "none",
+        overwrite: "auto",
+      }),
+      itemExitToFactory: (index) => ({
+        autoAlpha: index === 0 ? 0.78 : 0.72,
+        y: -8,
+        duration: CONFIG.phaseDuration.exit,
+        ease: "sine.inOut",
+        overwrite: "auto",
+      }),
+      staggerStep: 0.08,
+    };
+  }
+
   function createSceneModule(section, index) {
     const sceneId = section.id || `scene-${index + 1}`;
     const content = section.querySelector(".panel-content") || section;
     const layers = resolveSceneLayers(content);
     const isHero = sceneId === "hero";
+    const isProblems = sceneId === "problems";
     const heroReveal = isHero ? createHeroRevealConfig(content) : null;
+    const problemsReveal = isProblems ? createProblemsRevealConfig(content) : null;
 
     section.setAttribute("data-scene-id", sceneId);
     section.setAttribute("data-scene-index", String(index));
@@ -233,13 +296,15 @@
       },
       isHero,
       heroReveal,
+      isProblems,
+      problemsReveal,
       layers,
       motion: {
-        target: isHero ? content : layers.foreground.target || content,
+        target: isHero || isProblems ? content : layers.foreground.target || content,
         enterFrom: {
-          autoAlpha: isHero ? 1 : 0.35,
+          autoAlpha: isHero || isProblems ? 1 : 0.35,
           yPercent: 0,
-          scale: isHero ? 1 : 0.992,
+          scale: isHero || isProblems ? 1 : 0.992,
         },
         enterTo: {
           autoAlpha: 1,
@@ -368,6 +433,21 @@
         }
       }
 
+      if (scene.isProblems && scene.problemsReveal) {
+        window.gsap.set(scene.element, {
+          "--problems-darkness": 1,
+          "--problems-accent": 0.65,
+        });
+
+        scene.problemsReveal.items.forEach((item, index) => {
+          window.gsap.set(item, {
+            ...scene.problemsReveal.itemFromFactory(index),
+            transformOrigin: "50% 50%",
+            force3D: true,
+          });
+        });
+      }
+
       window.gsap.set(scene.motion.target, {
         autoAlpha: index === 0 ? 1 : scene.motion.enterFrom.autoAlpha,
         yPercent: index === 0 ? 0 : scene.motion.enterFrom.yPercent,
@@ -408,6 +488,10 @@
       addHeroSceneSlot(masterTimeline, scene, isLastScene);
       return;
     }
+    if (scene.isProblems && scene.problemsReveal) {
+      addProblemsSceneSlot(masterTimeline, scene, isLastScene);
+      return;
+    }
 
     masterTimeline.addLabel(scene.labels.enter);
     masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
@@ -433,6 +517,72 @@
     addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.exitTo, "<");
     addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.exitTo, "<");
     addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.exitTo, "<");
+
+    addSceneShift(masterTimeline, scene.index, isLastScene);
+  }
+
+  function addProblemsSceneSlot(masterTimeline, scene, isLastScene) {
+    const problems = scene.problemsReveal;
+
+    masterTimeline.addLabel(scene.labels.enter);
+    masterTimeline.call(() => runScenePhase(scene, "enter"), null, ">");
+    masterTimeline.fromTo(scene.element, problems.toneFrom, problems.toneTo);
+
+    addDepthTween(
+      masterTimeline,
+      scene.layers.background.target,
+      scene.depth.background.enterFrom,
+      scene.depth.background.enterTo,
+      "<"
+    );
+    addDepthTween(
+      masterTimeline,
+      scene.layers.midground.target,
+      scene.depth.midground.enterFrom,
+      scene.depth.midground.enterTo,
+      "<"
+    );
+    addDepthTween(
+      masterTimeline,
+      scene.layers.foreground.target,
+      scene.depth.foreground.enterFrom,
+      scene.depth.foreground.enterTo,
+      "<"
+    );
+
+    problems.items.forEach((item, index) => {
+      addElementTween(
+        masterTimeline,
+        item,
+        problems.itemFromFactory(index),
+        problems.itemToFactory(),
+        index === 0 ? "<+0.06" : `<+${problems.staggerStep}`
+      );
+    });
+
+    masterTimeline.addLabel(scene.labels.active);
+    masterTimeline.call(() => runScenePhase(scene, "active"), null, ">");
+    masterTimeline.to(scene.element, problems.toneActiveTo);
+
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.activeTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.activeTo, "<");
+
+    problems.items.forEach((item) => {
+      addElementTween(masterTimeline, item, null, problems.itemActiveToFactory(), "<");
+    });
+
+    masterTimeline.addLabel(scene.labels.exit);
+    masterTimeline.call(() => runScenePhase(scene, "exit"), null, ">");
+    masterTimeline.to(scene.element, problems.toneExitTo);
+
+    addDepthTween(masterTimeline, scene.layers.background.target, null, scene.depth.background.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.midground.target, null, scene.depth.midground.exitTo, "<");
+    addDepthTween(masterTimeline, scene.layers.foreground.target, null, scene.depth.foreground.exitTo, "<");
+
+    problems.items.forEach((item, index) => {
+      addElementTween(masterTimeline, item, null, problems.itemExitToFactory(index), "<");
+    });
 
     addSceneShift(masterTimeline, scene.index, isLastScene);
   }

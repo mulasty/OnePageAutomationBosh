@@ -179,9 +179,29 @@ body {
 }
 
 #problems {
+  --problems-darkness: 1;
+  --problems-accent: 0.65;
   background:
-    radial-gradient(circle at 84% 82%, rgba(226, 0, 21, 0.16), transparent 34%),
-    linear-gradient(170deg, #12161f 0%, #0b1017 100%);
+    radial-gradient(
+      circle at 84% 82%,
+      rgb(226 0 21 / calc(0.08 + var(--problems-accent) * 0.1)),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 14% 22%,
+      rgb(63 157 255 / calc(0.02 + var(--problems-accent) * 0.06)),
+      transparent 36%
+    ),
+    linear-gradient(170deg, #10141b 0%, #090d13 100%);
+}
+
+#problems::after {
+  background:
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / calc(0.18 + var(--problems-darkness) * 0.28)) 0%,
+      rgb(0 0 0 / calc(0.28 + var(--problems-darkness) * 0.36)) 100%
+    );
 }
 
 #ai-activation {
