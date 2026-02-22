@@ -181,6 +181,30 @@
       "mime": "image/svg+xml",
       "sha256": "8e281153a97e57583db4e9aefdc2b9830b1a062d5bd89bbfe043cc8fe98dfaf5",
       "status": "integrated"
+    },
+    {
+      "assetId": "scene-communication__layer-base__v01",
+      "sceneId": "communication",
+      "layerType": "base",
+      "path": "/assets/graphics/base/scene-communication__layer-base__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 1091,
+      "mime": "image/svg+xml",
+      "sha256": "5cf1d32f984c744a66bf49e25e50097c966e80cba9ffb64e2142a6625d301599",
+      "status": "integrated"
+    },
+    {
+      "assetId": "scene-communication__layer-overlay__v01",
+      "sceneId": "communication",
+      "layerType": "overlay",
+      "path": "/assets/graphics/overlay/scene-communication__layer-overlay__v01.svg",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 705,
+      "mime": "image/svg+xml",
+      "sha256": "7267eebfb3f3155539fe4c0e1fec521cc707aac8cd1d5a19ade579b51d10baa7",
+      "status": "integrated"
     }
   ]
 }

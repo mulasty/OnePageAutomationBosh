@@ -59,6 +59,12 @@
 
 ### parts
 - Commit: feat(graphics): integrate parts assets
-- Preview URL: pending
+- Preview URL: https://onepageautomationbosh-qmndnjmon-mula-group-s-projects.vercel.app
 - Build: pass
 - Notes: operations base with routing overlay channels for parts readiness.
+
+### communication
+- Commit: feat(graphics): integrate communication assets
+- Preview URL: pending
+- Build: pass
+- Notes: communication base plus channel overlay, text corridor preserved in center-left.
